@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diseño instruccional con el modelo ADDIE · Repositorio REDA</title>
+<link rel="stylesheet" href="assets/rea.css"></head>
+<body>
+<div class="top"><div class="in"><a href="../repositorio.html#sec-explorar">← Volver al repositorio</a><span>Repositorio Institucional REDA · Unidad 3</span></div></div>
+<header class="rhead"><div class="in">
+<div class="chips"><span class="chip">Guía o taller interactivo</span><span class="chip">Educación y pedagogía</span><span class="chip">Posgrado</span><span class="chip lic">CC BY 4.0</span></div>
+<h1>Diseño instruccional con el modelo ADDIE</h1><p>Elaboración propia (demo) · 2026-09-28</p></div></header>
+<main>
+<div class="demo">Recurso de demostración elaborado para ilustrar el boceto del Repositorio Institucional REDA (Unidad 3). No es material oficial de la universidad.</div>
+<section class="card"><h2>Objetivo de aprendizaje</h2><p class="obj">Planificar un curso virtual recorriendo las cinco fases del modelo ADDIE.</p></section>
+<section class="card"><h2>Las cinco fases del modelo ADDIE</h2><div class="q"><label style="display:flex;gap:.6rem;align-items:flex-start"><input type="checkbox" class="ck" id="k0" style="margin-top:.35rem"><span><b>1. Análisis</b><br><span class="muted" style="font-size:.9rem">¿Quiénes son los estudiantes? ¿Qué necesitan aprender? ¿Con qué recursos y limitaciones cuento?</span></span></label></div><div class="q"><label style="display:flex;gap:.6rem;align-items:flex-start"><input type="checkbox" class="ck" id="k1" style="margin-top:.35rem"><span><b>2. Diseño</b><br><span class="muted" style="font-size:.9rem">¿Cuáles son los objetivos? ¿Cómo se organizarán los contenidos, las actividades y la evaluación?</span></span></label></div><div class="q"><label style="display:flex;gap:.6rem;align-items:flex-start"><input type="checkbox" class="ck" id="k2" style="margin-top:.35rem"><span><b>3. Desarrollo</b><br><span class="muted" style="font-size:.9rem">Producir los materiales: textos, videos, actividades y cuestionarios. Revisar su calidad.</span></span></label></div><div class="q"><label style="display:flex;gap:.6rem;align-items:flex-start"><input type="checkbox" class="ck" id="k3" style="margin-top:.35rem"><span><b>4. Implementación</b><br><span class="muted" style="font-size:.9rem">Publicar el curso en la plataforma, capacitar a los participantes y acompañar su uso.</span></span></label></div><div class="q"><label style="display:flex;gap:.6rem;align-items:flex-start"><input type="checkbox" class="ck" id="k4" style="margin-top:.35rem"><span><b>5. Evaluación</b><br><span class="muted" style="font-size:.9rem">¿Se lograron los objetivos? ¿Qué ajustes requiere el curso? Recoger evidencias y retroalimentación.</span></span></label></div><div class="score" id="pr"></div><p><button class="g" id="rs">Reiniciar avance</button></p></section><section class="card"><h2>Plantilla de planificación</h2><div class="scroll"><table class="t"><thead><tr><th>Fase</th><th>Producto</th><th>Responsable</th><th>Fecha</th></tr></thead><tbody><tr><td>Análisis</td><td></td><td></td><td></td></tr><tr><td>Diseño</td><td></td><td></td><td></td></tr><tr><td>Desarrollo</td><td></td><td></td><td></td></tr><tr><td>Implementación</td><td></td><td></td><td></td></tr><tr><td>Evaluación</td><td></td><td></td><td></td></tr></tbody></table></div><p><button class="p" onclick="print()">Imprimir plantilla</button></p></section>
+<section class="card"><h2>Cómo citar este recurso</h2><div class="cite">Elaboración propia (demo) (2026). <i>Diseño instruccional con el modelo ADDIE</i> [Guía o taller interactivo]. Repositorio Institucional REDA, Universidad de Cartagena (boceto). Licencia CC BY 4.0.</div>
+<p class="muted" style="font-size:.84rem;margin-bottom:0">Licencia CC BY 4.0: se permite su uso con reconocimiento de la autoría, conforme a la Ley 23 de 1982 y la Ley 1915 de 2018.</p></section>
+</main>
+<footer class="rf">Metadatos: tipo · área · nivel · autor · fecha · licencia · objetivo de aprendizaje.</footer>
+<script>
+var cks=document.querySelectorAll('.ck');
+function upd(){var n=0;cks.forEach(function(c){if(c.checked)n++;});document.getElementById('pr').textContent='Avance: '+n+' de '+cks.length+' fases';}
+cks.forEach(function(c){c.addEventListener('change',upd);});
+document.getElementById('rs').addEventListener('click',function(){cks.forEach(function(c){c.checked=false;});upd();});upd();
+</script>
+</body></html>

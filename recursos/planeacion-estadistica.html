@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planeación: estadística descriptiva (unidad 1) · Repositorio REDA</title>
+<link rel="stylesheet" href="assets/rea.css"></head>
+<body>
+<div class="top"><div class="in"><a href="../repositorio.html#sec-explorar">← Volver al repositorio</a><span>Repositorio Institucional REDA · Unidad 3</span></div></div>
+<header class="rhead"><div class="in">
+<div class="chips"><span class="chip">Planeación de clase</span><span class="chip">Ciencias básicas</span><span class="chip">Pregrado</span><span class="chip lic">CC BY-SA 4.0</span></div>
+<h1>Planeación: estadística descriptiva (unidad 1)</h1><p>Elaboración propia (demo) · 2026-09-06</p></div></header>
+<main>
+<div class="demo">Recurso de demostración elaborado para ilustrar el boceto del Repositorio Institucional REDA (Unidad 3). No es material oficial de la universidad.</div>
+<section class="card"><h2>Objetivo de aprendizaje</h2><p class="obj">Calcular e interpretar medidas de tendencia central y de dispersión en un conjunto de datos.</p></section>
+<section class="card"><h2>Secuencia de 4 sesiones</h2><div class="scroll"><table class="t">
+<thead><tr><th>Sesión</th><th>Tema</th><th>Actividad</th><th>Evaluación formativa</th></tr></thead><tbody>
+<tr><td>1</td><td>Variables y tipos de datos</td><td>Clasificar variables de una encuesta</td><td>Ticket de salida</td></tr>
+<tr><td>2</td><td>Tablas de frecuencia y gráficos</td><td>Construir una tabla con datos del grupo</td><td>Revisión por pares</td></tr>
+<tr><td>3</td><td>Media, mediana y moda</td><td>Calcular medidas con la calculadora</td><td>Ejercicios autocorregidos</td></tr>
+<tr><td>4</td><td>Dispersión e interpretación</td><td>Informe breve de resultados</td><td>Rúbrica</td></tr></tbody></table></div></section>
+<section class="card"><h2>Calculadora de medidas descriptivas</h2><p class="muted">Escribe números separados por comas.</p>
+<p><input id="nums" value="4, 8, 6, 5, 3, 8, 9" style="width:100%" aria-label="Lista de números"></p><p><button class="p" id="calc">Calcular</button></p><div id="out" role="status" aria-live="polite"></div></section>
+<section class="card"><h2>Cómo citar este recurso</h2><div class="cite">Elaboración propia (demo) (2026). <i>Planeación: estadística descriptiva (unidad 1)</i> [Planeación de clase]. Repositorio Institucional REDA, Universidad de Cartagena (boceto). Licencia CC BY-SA 4.0.</div>
+<p class="muted" style="font-size:.84rem;margin-bottom:0">Licencia CC BY-SA 4.0: se permite su uso con reconocimiento de la autoría, conforme a la Ley 23 de 1982 y la Ley 1915 de 2018.</p></section>
+</main>
+<footer class="rf">Metadatos: tipo · área · nivel · autor · fecha · licencia · objetivo de aprendizaje.</footer>
+<script>
+document.getElementById('calc').addEventListener('click',function(){
+ var a=document.getElementById('nums').value.split(',').map(function(s){return parseFloat(s.trim().replace(',','.'));}).filter(function(n){return !isNaN(n);});
+ var o=document.getElementById('out');if(!a.length){o.innerHTML='<div class="demo">Escribe al menos un número válido.</div>';return;}
+ var s=a.slice().sort(function(x,y){return x-y;}),n=s.length,sum=s.reduce(function(x,y){return x+y;},0),m=sum/n;
+ var med=n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2,c={},mx=0;s.forEach(function(v){c[v]=(c[v]||0)+1;mx=Math.max(mx,c[v]);});
+ var moda=Object.keys(c).filter(function(k){return c[k]===mx;}).join(', ');if(mx===1)moda='no hay moda';
+ var sd=Math.sqrt(a.reduce(function(t,v){return t+(v-m)*(v-m);},0)/n);
+ o.innerHTML='<table class="t"><tr><th>n</th><td>'+n+'</td></tr><tr><th>Media</th><td>'+m.toFixed(2)+'</td></tr><tr><th>Mediana</th><td>'+med+'</td></tr><tr><th>Moda</th><td>'+moda+'</td></tr><tr><th>Rango</th><td>'+(s[n-1]-s[0])+'</td></tr><tr><th>Desviación estándar (poblacional)</th><td>'+sd.toFixed(2)+'</td></tr></table>';
+});
+</script>
+</body></html>

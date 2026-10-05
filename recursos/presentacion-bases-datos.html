@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bases de datos relacionales: presentación de clase · Repositorio REDA</title>
+<link rel="stylesheet" href="assets/rea.css"></head>
+<body>
+<div class="top"><div class="in"><a href="../repositorio.html#sec-explorar">← Volver al repositorio</a><span>Repositorio Institucional REDA · Unidad 3</span></div></div>
+<header class="rhead"><div class="in">
+<div class="chips"><span class="chip">Presentación multimedia</span><span class="chip">Ingeniería y tecnología</span><span class="chip">Pregrado</span><span class="chip lic">CC BY-SA 4.0</span></div>
+<h1>Bases de datos relacionales: presentación de clase</h1><p>Elaboración propia (demo) · 2026-09-14</p></div></header>
+<main>
+<div class="demo">Recurso de demostración elaborado para ilustrar el boceto del Repositorio Institucional REDA (Unidad 3). No es material oficial de la universidad.</div>
+<section class="card"><h2>Objetivo de aprendizaje</h2><p class="obj">Diseñar un modelo entidad-relación sencillo identificando entidades, claves y relaciones.</p></section>
+<section class="card"><h2>Presentación</h2>
+<div id="sl" style="min-height:260px;background:var(--soft);border-radius:12px;padding:1.2rem 1.4rem"></div>
+<p style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap"><button class="g" id="prev">← Anterior</button><button class="p" id="next">Siguiente →</button><span class="muted" id="cnt"></span><span class="muted" style="font-size:.8rem">(también con las flechas del teclado)</span></p></section>
+<section class="card"><h2>Cómo citar este recurso</h2><div class="cite">Elaboración propia (demo) (2026). <i>Bases de datos relacionales: presentación de clase</i> [Presentación multimedia]. Repositorio Institucional REDA, Universidad de Cartagena (boceto). Licencia CC BY-SA 4.0.</div>
+<p class="muted" style="font-size:.84rem;margin-bottom:0">Licencia CC BY-SA 4.0: se permite su uso con reconocimiento de la autoría, conforme a la Ley 23 de 1982 y la Ley 1915 de 2018.</p></section>
+</main>
+<footer class="rf">Metadatos: tipo · área · nivel · autor · fecha · licencia · objetivo de aprendizaje.</footer>
+<script>
+var S=[
+'<h3>¿Qué es una base de datos relacional?</h3><p>Un conjunto organizado de datos almacenados en <b>tablas</b> (filas y columnas) que se relacionan entre sí mediante <b>claves</b>.</p>',
+'<h3>Conceptos básicos</h3><ul><li><b>Tabla:</b> conjunto de registros de una entidad (p. ej., Estudiante).</li><li><b>Fila (registro):</b> un caso concreto.</li><li><b>Columna (campo):</b> un atributo (nombre, código).</li></ul>',
+'<h3>Claves</h3><ul><li><b>Clave primaria:</b> identifica de forma única cada fila.</li><li><b>Clave foránea:</b> campo que apunta a la clave primaria de otra tabla.</li></ul>',
+'<h3>Ejemplo: modelo entidad-relación</h3><svg viewBox="0 0 520 110" style="width:100%;max-width:520px"><rect x="10" y="30" width="150" height="50" rx="8" fill="#1E3A73"/><text x="85" y="60" fill="#fff" text-anchor="middle" font-size="14">ESTUDIANTE</text><rect x="360" y="30" width="150" height="50" rx="8" fill="#1E3A73"/><text x="435" y="60" fill="#fff" text-anchor="middle" font-size="14">CURSO</text><polygon points="260,20 310,55 260,90 210,55" fill="#F2A93B"/><text x="260" y="59" text-anchor="middle" font-size="12" fill="#3a2a06">se matricula</text><line x1="160" y1="55" x2="210" y2="55" stroke="#33C6D9" stroke-width="3"/><line x1="310" y1="55" x2="360" y2="55" stroke="#33C6D9" stroke-width="3"/><text x="180" y="45" font-size="12" fill="currentColor">N</text><text x="330" y="45" font-size="12" fill="currentColor">M</text></svg><p>Un estudiante puede matricular varios cursos y un curso tiene varios estudiantes: relación <b>muchos a muchos</b>.</p>',
+'<h3>Consulta con SQL</h3><pre style="background:#0f1f42;color:#e6ebf7;padding:.8rem;border-radius:8px;overflow:auto">SELECT nombre\nFROM estudiante\nWHERE programa = \'Ingeniería\'\nORDER BY nombre;</pre><p>SQL permite consultar, insertar, actualizar y borrar datos.</p>',
+'<h3>Ejercicio propuesto</h3><p>Diseña un modelo entidad-relación para una biblioteca con las entidades <b>Libro</b>, <b>Socio</b> y <b>Préstamo</b>. Identifica claves primarias y foráneas.</p>'];
+var i=0,el=document.getElementById('sl');
+function show(){el.innerHTML=S[i];document.getElementById('cnt').textContent='Diapositiva '+(i+1)+' de '+S.length;}
+document.getElementById('next').onclick=function(){i=Math.min(S.length-1,i+1);show();};
+document.getElementById('prev').onclick=function(){i=Math.max(0,i-1);show();};
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight')document.getElementById('next').click();if(e.key==='ArrowLeft')document.getElementById('prev').click();});
+show();
+</script>
+</body></html>

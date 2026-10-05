@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio virtual: leyes de los gases · Repositorio REDA</title>
+<link rel="stylesheet" href="assets/rea.css"></head>
+<body>
+<div class="top"><div class="in"><a href="../repositorio.html#sec-explorar">← Volver al repositorio</a><span>Repositorio Institucional REDA · Unidad 3</span></div></div>
+<header class="rhead"><div class="in">
+<div class="chips"><span class="chip">OVA</span><span class="chip">Ciencias básicas</span><span class="chip">Pregrado</span><span class="chip lic">CC BY-SA 4.0</span></div>
+<h1>Laboratorio virtual: leyes de los gases</h1><p>Elaboración propia (demo) · 2026-09-18</p></div></header>
+<main>
+<div class="demo">Recurso de demostración elaborado para ilustrar el boceto del Repositorio Institucional REDA (Unidad 3). No es material oficial de la universidad.</div>
+<section class="card"><h2>Objetivo de aprendizaje</h2><p class="obj">Relacionar presión, volumen y temperatura de un gas ideal mediante simulación.</p></section>
+<section class="card"><h2>Simulador: ley de los gases ideales</h2>
+<p class="muted">Se cumple P·V = n·R·T. Con 1 mol de gas (n = 1) y R = 0,0821 L·atm/(mol·K), modifica la temperatura y el volumen y observa la presión.</p>
+<p><label>Temperatura: <b id="tv">300</b> K<br><input type="range" id="T" min="200" max="500" value="300" style="width:100%"></label></p>
+<p><label>Volumen: <b id="vv">10</b> L<br><input type="range" id="V" min="2" max="20" value="10" style="width:100%"></label></p>
+<p style="font-size:1.2rem">Presión: <b id="pv"></b> atm</p>
+<div style="height:14px;background:var(--soft);border-radius:99px;overflow:hidden"><div id="pb" style="height:100%;background:linear-gradient(90deg,var(--navy-2),var(--cyan));width:0"></div></div>
+<canvas id="cv" width="600" height="160" style="width:100%;max-width:600px;margin-top:1rem;border:1px solid var(--border);border-radius:10px"></canvas>
+</section>
+<section class="card"><h2>Actividad guiada</h2><ol>
+<li>Fija T = 300 K y duplica el volumen de 5 L a 10 L. ¿Qué le pasa a la presión? <i>(Se reduce a la mitad: ley de Boyle.)</i></li>
+<li>Fija V = 10 L y sube la temperatura de 250 K a 500 K. ¿Qué pasa con la presión? <i>(Se duplica: ley de Gay-Lussac.)</i></li>
+<li>Escribe con tus palabras cómo se relacionan presión, volumen y temperatura.</li></ol></section>
+<section class="card"><h2>Cómo citar este recurso</h2><div class="cite">Elaboración propia (demo) (2026). <i>Laboratorio virtual: leyes de los gases</i> [OVA]. Repositorio Institucional REDA, Universidad de Cartagena (boceto). Licencia CC BY-SA 4.0.</div>
+<p class="muted" style="font-size:.84rem;margin-bottom:0">Licencia CC BY-SA 4.0: se permite su uso con reconocimiento de la autoría, conforme a la Ley 23 de 1982 y la Ley 1915 de 2018.</p></section>
+</main>
+<footer class="rf">Metadatos: tipo · área · nivel · autor · fecha · licencia · objetivo de aprendizaje.</footer>
+<script>
+var T=document.getElementById('T'),V=document.getElementById('V'),cv=document.getElementById('cv'),ctx=cv.getContext('2d'),parts=[];
+for(var i=0;i<40;i++)parts.push({x:Math.random(),y:Math.random(),a:Math.random()*6.28});
+function upd(){var t=+T.value,v=+V.value,p=(0.0821*t/v);
+ document.getElementById('tv').textContent=t;document.getElementById('vv').textContent=v;
+ document.getElementById('pv').textContent=p.toFixed(2);document.getElementById('pb').style.width=Math.min(100,p/12.3*100)+'%';}
+function draw(){var t=+T.value,v=+V.value,w=cv.width*(v/20),sp=t/300*2.2;
+ ctx.clearRect(0,0,cv.width,cv.height);ctx.strokeStyle='#33C6D9';ctx.lineWidth=3;ctx.strokeRect(2,2,w-4,cv.height-4);
+ ctx.fillStyle='#F2A93B';parts.forEach(function(p){p.x+=Math.cos(p.a)*sp/200;p.y+=Math.sin(p.a)*sp/100;
+  if(p.x<0||p.x>1)p.a=Math.PI-p.a;if(p.y<0||p.y>1)p.a=-p.a;p.x=Math.min(1,Math.max(0,p.x));p.y=Math.min(1,Math.max(0,p.y));
+  ctx.beginPath();ctx.arc(8+p.x*(w-16),8+p.y*(cv.height-16),4,0,6.28);ctx.fill();});requestAnimationFrame(draw);}
+T.addEventListener('input',upd);V.addEventListener('input',upd);upd();
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches)draw();else{draw=function(){};}
+</script>
+</body></html>

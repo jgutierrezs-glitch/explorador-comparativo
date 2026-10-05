@@ -1,0 +1,47 @@
+:root{--navy:#152A54;--navy-2:#1E3A73;--gold:#F2A93B;--cyan:#33C6D9;--bg:#F5F7FB;--card:#fff;--soft:#f0f3f9;--text:#1C2333;--muted:#5B6478;--ok:#1E8E5A;--ok-bg:#e5f6ec;--bad:#B42318;--bad-bg:#fdeceb;--warn:#B45309;--warn-bg:#fdf1e3;--border:#E1E6F0;--link:#1E3A73;}
+@media (prefers-color-scheme:dark){:root{--navy:#9db8f0;--navy-2:#b9ccf5;--bg:#0e1424;--card:#161e33;--soft:#1e2842;--text:#e6ebf7;--muted:#9aa6c2;--ok:#5fd29b;--ok-bg:#12352a;--bad:#ff8f84;--bad-bg:#3b1a18;--warn:#f0b36a;--warn-bg:#3a2a12;--border:#2a3656;--link:#9db8f0;}}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+a{color:var(--link)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:5px}
+.top{background:#0f1f42;color:#fff;font-size:.85rem}
+.top .in{max-width:900px;margin:auto;padding:.5rem 1rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.top a{color:#fff;font-weight:600;text-decoration:none}
+.top a:hover{text-decoration:underline}
+header.rhead{background:linear-gradient(135deg,#152A54,#1E3A73);color:#fff;padding:1.6rem 1rem 2.4rem}
+header.rhead .in{max-width:900px;margin:auto}
+header.rhead h1{margin:.5rem 0 .3rem;font-size:1.6rem}
+header.rhead p{margin:0;color:#c9d4ec;font-size:.92rem}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap}
+.chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:.12rem .7rem;font-size:.76rem;font-weight:700}
+.chip.lic{background:var(--gold);color:#3a2a06;border-color:var(--gold)}
+main{max-width:900px;margin:-1.2rem auto 2rem;padding:0 1rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.5rem;margin-bottom:1.2rem;box-shadow:0 6px 18px rgba(21,42,84,.07)}
+.card h2{margin:0 0 .5rem;font-size:1.15rem;color:var(--navy)}
+.card h3{color:var(--navy);margin:1rem 0 .3rem;font-size:1rem}
+.muted{color:var(--muted)}
+.obj{background:var(--soft);border-left:4px solid var(--cyan);padding:.6rem .9rem;border-radius:8px;font-size:.92rem}
+button.p,button.g{font:inherit;font-weight:600;font-size:.9rem;border-radius:8px;padding:.5rem 1rem;cursor:pointer}
+button.p{background:var(--navy);color:var(--card);border:1px solid var(--navy)}
+button.g{background:var(--soft);color:var(--navy);border:1px solid var(--border)}
+button.p:hover{filter:brightness(1.15)}
+button.g:hover{border-color:var(--navy)}
+input,select,textarea{font:inherit;padding:.5rem .7rem;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)}
+.q{border:1px solid var(--border);border-radius:10px;padding:1rem;margin:.8rem 0;background:var(--soft)}
+.q p{margin:0 0 .5rem;font-weight:600}
+.q pre{background:#0f1f42;color:#e6ebf7;padding:.7rem;border-radius:8px;overflow-x:auto;font-size:.85rem;margin:.3rem 0 .6rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;padding:.5rem .8rem;margin:.3rem 0;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--navy)}
+.opt.right{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.fb{display:none;font-size:.88rem;color:var(--muted);margin-top:.4rem}
+.q.done .fb{display:block}
+.score{font-weight:700;color:var(--navy);margin-top:.6rem}
+table.t{border-collapse:collapse;width:100%;font-size:.9rem}
+table.t th,table.t td{text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--border);vertical-align:top}
+table.t th{background:var(--soft);color:var(--navy)}
+.scroll{overflow-x:auto}
+.cite{background:var(--soft);border-radius:8px;padding:.7rem .9rem;font-size:.84rem;color:var(--muted)}
+footer.rf{text-align:center;color:var(--muted);font-size:.8rem;padding:1rem 1rem 2rem}
+.demo{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:.5rem .8rem;font-size:.82rem;margin-bottom:1rem}
+@media print{.top,button{display:none!important}body{background:#fff}}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taller de derechos de autor y licencias abiertas · Repositorio REDA</title>
+<link rel="stylesheet" href="assets/rea.css"></head>
+<body>
+<div class="top"><div class="in"><a href="../repositorio.html#sec-explorar">← Volver al repositorio</a><span>Repositorio Institucional REDA · Unidad 3</span></div></div>
+<header class="rhead"><div class="in">
+<div class="chips"><span class="chip">Guía o taller interactivo</span><span class="chip">Educación y pedagogía</span><span class="chip">Educación continua</span><span class="chip lic">CC BY-SA 4.0</span></div>
+<h1>Taller de derechos de autor y licencias abiertas</h1><p>Elaboración propia (demo) · 2026-09-24</p></div></header>
+<main>
+<div class="demo">Recurso de demostración elaborado para ilustrar el boceto del Repositorio Institucional REDA (Unidad 3). No es material oficial de la universidad.</div>
+<section class="card"><h2>Objetivo de aprendizaje</h2><p class="obj">Elegir la licencia Creative Commons adecuada para un recurso educativo propio.</p></section>
+<section class="card"><h2>Asistente de elección de licencia</h2>
+<p class="muted">Responde dos preguntas sobre cómo quieres que otros usen tu recurso.</p>
+<h3>1. ¿Permites que otros hagan <b>uso comercial</b> de tu obra?</h3>
+<p><label><input type="radio" name="com" value="si" checked> Sí</label> &nbsp; <label><input type="radio" name="com" value="no"> No</label></p>
+<h3>2. ¿Permites que otros <b>adapten o modifiquen</b> tu obra?</h3>
+<p><label><input type="radio" name="der" value="si" checked> Sí</label> &nbsp; <label><input type="radio" name="der" value="sa"> Sí, pero exigiendo compartir bajo la misma licencia</label> &nbsp; <label><input type="radio" name="der" value="no"> No</label></p>
+<p><button class="p" id="go">Obtener recomendación</button></p>
+<div id="res" role="status" aria-live="polite"></div></section>
+<section class="card"><h2>Las licencias Creative Commons</h2><div class="scroll"><table class="t">
+<thead><tr><th>Licencia</th><th>Qué permite</th></tr></thead><tbody>
+<tr><td>CC BY</td><td>Uso, adaptación y distribución, incluso comercial, con reconocimiento del autor.</td></tr>
+<tr><td>CC BY-SA</td><td>Igual que CC BY, pero las obras derivadas deben usar la misma licencia.</td></tr>
+<tr><td>CC BY-NC</td><td>Uso y adaptación sin fines comerciales, con reconocimiento.</td></tr>
+<tr><td>CC BY-NC-SA</td><td>Sin fines comerciales y compartiendo igual.</td></tr>
+<tr><td>CC BY-ND</td><td>Se puede redistribuir sin cambios, con reconocimiento.</td></tr>
+<tr><td>CC BY-NC-ND</td><td>La más restrictiva: sin uso comercial y sin obras derivadas.</td></tr></tbody></table></div>
+<p>Herramienta oficial de elección: <a href="https://creativecommons.org/choose/?lang=es" target="_blank" rel="noopener">creativecommons.org/choose</a></p></section>
+<section class="card"><h2>Cómo citar este recurso</h2><div class="cite">Elaboración propia (demo) (2026). <i>Taller de derechos de autor y licencias abiertas</i> [Guía o taller interactivo]. Repositorio Institucional REDA, Universidad de Cartagena (boceto). Licencia CC BY-SA 4.0.</div>
+<p class="muted" style="font-size:.84rem;margin-bottom:0">Licencia CC BY-SA 4.0: se permite su uso con reconocimiento de la autoría, conforme a la Ley 23 de 1982 y la Ley 1915 de 2018.</p></section>
+</main>
+<footer class="rf">Metadatos: tipo · área · nivel · autor · fecha · licencia · objetivo de aprendizaje.</footer>
+<script>
+document.getElementById('go').addEventListener('click',function(){
+  var c=document.querySelector('input[name=com]:checked').value, d=document.querySelector('input[name=der]:checked').value, l;
+  if(c==='si'&&d==='si') l='CC BY'; else if(c==='si'&&d==='sa') l='CC BY-SA'; else if(c==='si'&&d==='no') l='CC BY-ND';
+  else if(d==='si') l='CC BY-NC'; else if(d==='sa') l='CC BY-NC-SA'; else l='CC BY-NC-ND';
+  var open=(l==='CC BY'||l==='CC BY-SA');
+  document.getElementById('res').innerHTML='<div class="obj"><b>Licencia sugerida: '+l+'</b><br>'+(open?'Es la más alineada con un repositorio de acceso abierto.':'Es más restrictiva; el repositorio la acepta, pero limita la reutilización por otros docentes.')+'</div>';
+});
+</script>
+</body></html>

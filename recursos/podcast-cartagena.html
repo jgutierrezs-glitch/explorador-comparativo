@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pódcast: historias de la Cartagena colonial · Repositorio REDA</title>
+<link rel="stylesheet" href="assets/rea.css"></head>
+<body>
+<div class="top"><div class="in"><a href="../repositorio.html#sec-explorar">← Volver al repositorio</a><span>Repositorio Institucional REDA · Unidad 3</span></div></div>
+<header class="rhead"><div class="in">
+<div class="chips"><span class="chip">Pódcast educativo</span><span class="chip">Ciencias sociales y humanas</span><span class="chip">Educación continua</span><span class="chip lic">CC BY-NC 4.0</span></div>
+<h1>Pódcast: historias de la Cartagena colonial</h1><p>Elaboración propia (demo) · 2026-09-16</p></div></header>
+<main>
+<div class="demo">Recurso de demostración elaborado para ilustrar el boceto del Repositorio Institucional REDA (Unidad 3). No es material oficial de la universidad.</div>
+<section class="card"><h2>Objetivo de aprendizaje</h2><p class="obj">Contextualizar procesos históricos de Cartagena de Indias desde su fundación hasta su declaratoria como patrimonio.</p></section>
+<section class="card"><h2>Episodios</h2><p class="muted">Demostración: el audio se genera con la voz del navegador (síntesis de voz). Puedes leer la transcripción o escucharla.</p><div class="q"><p>Episodio 1 · Una ciudad fundada en 1533</p><p style="font-weight:400" id="e0">Cartagena de Indias fue fundada el 1 de junio de 1533 por Pedro de Heredia, en la bahía de Calamarí. Su puerto natural la convirtió en una pieza clave del comercio y la defensa del imperio español en el Caribe.</p><button class="p" data-e="0">▶ Escuchar</button> <button class="g" data-stop>■ Detener</button></div><div class="q"><p>Episodio 2 · Murallas y comercio</p><p style="font-weight:400" id="e1">Durante la época colonial, la ciudad se rodeó de murallas y fuertes para protegerla de ataques. Por su puerto pasaban mercancías y personas, entre ellas miles de africanos esclavizados, y esa historia forma parte de la memoria de la ciudad.</p><button class="p" data-e="1">▶ Escuchar</button> <button class="g" data-stop>■ Detener</button></div><div class="q"><p>Episodio 3 · Independencia y patrimonio</p><p style="font-weight:400" id="e2">El 11 de noviembre de 1811 Cartagena declaró su independencia absoluta de España. En 1984, su centro histórico, murallas y fortificaciones fueron declarados Patrimonio de la Humanidad por la UNESCO.</p><button class="p" data-e="2">▶ Escuchar</button> <button class="g" data-stop>■ Detener</button></div></section><section class="card"><h2>Guía de escucha</h2><ol><li>¿Qué factores geográficos explican la importancia de la ciudad?</li><li>¿Qué papel tuvo el puerto en el comercio colonial?</li><li>¿Por qué el centro histórico es patrimonio de la humanidad?</li></ol></section>
+<section class="card"><h2>Cómo citar este recurso</h2><div class="cite">Elaboración propia (demo) (2026). <i>Pódcast: historias de la Cartagena colonial</i> [Pódcast educativo]. Repositorio Institucional REDA, Universidad de Cartagena (boceto). Licencia CC BY-NC 4.0.</div>
+<p class="muted" style="font-size:.84rem;margin-bottom:0">Licencia CC BY-NC 4.0: se permite su uso con reconocimiento de la autoría, conforme a la Ley 23 de 1982 y la Ley 1915 de 2018.</p></section>
+</main>
+<footer class="rf">Metadatos: tipo · área · nivel · autor · fecha · licencia · objetivo de aprendizaje.</footer>
+<script>
+var syn=window.speechSynthesis;
+document.querySelectorAll('[data-e]').forEach(function(b){b.addEventListener('click',function(){
+ if(!syn){alert('Tu navegador no admite síntesis de voz. Lee la transcripción.');return;}
+ syn.cancel();var u=new SpeechSynthesisUtterance(document.getElementById('e'+b.dataset.e).textContent);u.lang='es-CO';syn.speak(u);});});
+document.querySelectorAll('[data-stop]').forEach(function(b){b.addEventListener('click',function(){if(syn)syn.cancel();});});
+</script>
+</body></html>
