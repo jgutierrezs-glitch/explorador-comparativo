@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explorador Comparativo: Bancos de Recursos, LMS y CMS</title>
+<meta name="description" content="REA interactivo: compara Moodle, Blackboard y Sakai, explora bancos de recursos abiertos y evalúa la calidad de un recurso educativo digital.">
+<style>
+  :root{
+    --navy:#152A54; --navy-2:#1E3A73; --gold:#F2A93B; --cyan:#33C6D9;
+    --bg:#F5F7FB; --card:#FFFFFF; --soft:#f0f3f9; --soft-2:#fafbfe;
+    --text:#1C2333; --muted:#5B6478; --ok:#1E8E5A; --ok-bg:#e5f6ec;
+    --warn:#B45309; --warn-bg:#fdf1e3; --bad:#B42318; --bad-bg:#fdeceb;
+    --border:#E1E6F0; --link:#1E3A73; --shadow:0 6px 18px rgba(21,42,84,.06);
+  }
+  :root[data-theme="dark"]{
+    --navy:#9db8f0; --navy-2:#b9ccf5; --bg:#0e1424; --card:#161e33; --soft:#1e2842; --soft-2:#1a2339;
+    --text:#e6ebf7; --muted:#9aa6c2; --ok:#5fd29b; --ok-bg:#12352a; --warn:#f0b36a; --warn-bg:#3a2a12;
+    --bad:#ff8f84; --bad-bg:#3b1a18; --border:#2a3656; --link:#9db8f0; --shadow:0 6px 18px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;}
+  a{color:var(--link);}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px;}
+  .skip{position:absolute;left:-999px;top:0;background:var(--gold);color:#000;padding:.5rem 1rem;z-index:99;}
+  .skip:focus{left:0;}
+
+  header.hero{background:linear-gradient(135deg,#152A54 0%,#1E3A73 100%);color:#fff;padding:2.2rem 1.5rem 3.2rem;text-align:center;position:relative;}
+  header.hero h1{margin:0 0 .4rem;font-size:1.65rem;}
+  header.hero p{margin:0 auto;color:#c9d4ec;max-width:680px;font-size:.95rem;}
+  .theme-btn{position:absolute;top:.8rem;right:.8rem;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.35rem .8rem;cursor:pointer;font-size:.85rem;}
+  .theme-btn:hover{background:rgba(255,255,255,.25);}
+
+  nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
+  nav.toc .in{max-width:980px;margin:auto;padding:.45rem 1rem;display:flex;gap:.3rem;overflow-x:auto;align-items:center;}
+  nav.toc a{white-space:nowrap;text-decoration:none;font-size:.85rem;font-weight:600;color:var(--navy);padding:.35rem .75rem;border-radius:999px;}
+  nav.toc a:hover,nav.toc a.cur{background:var(--navy);color:var(--card);}
+  .progress{height:4px;background:var(--border);}
+  .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--cyan));transition:width .3s;}
+
+  main{max-width:980px;margin:-1.6rem auto 3rem;padding:0 1rem;}
+  nav.toc + main{margin-top:1.2rem;}
+  section.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem 1.6rem 1.8rem;margin-bottom:1.6rem;box-shadow:var(--shadow);scroll-margin-top:70px;}
+  section.card h2{margin-top:0;font-size:1.2rem;color:var(--navy);display:flex;align-items:center;gap:.5rem;}
+  .num{background:var(--gold);color:#3a2a06;font-weight:700;font-size:.85rem;width:1.7rem;height:1.7rem;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;}
+  h3{color:var(--navy);margin:1.2rem 0 .4rem;font-size:1rem;}
+  .lead{color:var(--muted);margin-top:0;}
+
+  /* Tarjetas de resumen */
+  .stats{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:1rem 0 0;}
+  .stat{background:var(--soft-2);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;}
+  .stat b{display:block;font-size:1.4rem;color:var(--navy);}
+  .stat span{font-size:.82rem;color:var(--muted);}
+
+  /* Tabs */
+  .tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0 1.2rem;}
+  .tab-btn{border:1px solid var(--border);background:var(--soft);color:var(--navy);padding:.5rem 1.05rem;border-radius:999px;font-weight:600;font-size:.9rem;cursor:pointer;}
+  .tab-btn:hover{border-color:var(--navy);}
+  .tab-btn[aria-selected="true"]{background:var(--navy);color:var(--card);border-color:var(--navy);}
+  .tab-panel{display:none;animation:fade .25s;}
+  .tab-panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .platform-title{font-size:1.1rem;font-weight:700;color:var(--navy-2);margin:0 0 .3rem;}
+  .badge{display:inline-block;background:var(--cyan);color:#04333a;font-size:.75rem;font-weight:700;padding:.15rem .6rem;border-radius:999px;margin:0 .3rem .7rem 0;}
+  .badge.alt{background:var(--gold);color:#3a2a06;}
+  dl.features{margin:0;}
+  dl.features dt{font-weight:700;color:var(--navy);margin-top:.7rem;font-size:.88rem;}
+  dl.features dd{margin:.1rem 0 0;color:var(--muted);font-size:.93rem;}
+  .meters{display:grid;gap:.5rem;margin-top:1rem;}
+  .meter{display:grid;grid-template-columns:130px 1fr 28px;gap:.6rem;align-items:center;font-size:.85rem;color:var(--muted);}
+  .meter .bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;}
+  .meter .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--navy-2),var(--cyan));border-radius:99px;}
+
+  /* Tabla comparativa */
+  .table-wrap{overflow-x:auto;margin-top:1rem;border:1px solid var(--border);border-radius:10px;}
+  table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:560px;}
+  th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
+  thead th{background:var(--soft);color:var(--navy);}
+  tbody th{color:var(--navy);font-weight:700;background:var(--soft-2);width:22%;}
+  tr:last-child th,tr:last-child td{border-bottom:none;}
+  .toggle{margin-top:.8rem;}
+  button.ghost,button.primary{font:inherit;font-weight:600;font-size:.88rem;border-radius:8px;padding:.5rem 1rem;cursor:pointer;}
+  button.ghost{background:var(--soft);color:var(--navy);border:1px solid var(--border);}
+  button.ghost:hover{border-color:var(--navy);}
+  button.primary{background:var(--navy);color:var(--card);border:1px solid var(--navy);}
+  button.primary:hover{background:var(--navy-2);}
+
+  /* LMS vs CMS / escenarios */
+  .two{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+  .box{border:1px solid var(--border);border-radius:10px;padding:1rem;background:var(--soft-2);}
+  .box h4{margin:0 0 .3rem;color:var(--navy);}
+  .box p,.box li{font-size:.9rem;color:var(--muted);}
+  .box ul{padding-left:1.1rem;margin:.3rem 0 0;}
+
+  /* Directorio */
+  .toolbar{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0;align-items:center;}
+  .toolbar input[type=search],.toolbar select{font:inherit;font-size:.9rem;padding:.5rem .75rem;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);}
+  .toolbar input[type=search]{flex:1;min-width:180px;}
+  .bank-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+  .bank{border:1px solid var(--border);border-radius:10px;padding:1rem;background:var(--soft-2);display:flex;flex-direction:column;}
+  .bank h3{margin:0 0 .3rem;font-size:1.02rem;}
+  .bank h3 a{font-weight:700;text-decoration:none;}
+  .bank h3 a:hover{text-decoration:underline;}
+  .bank p{margin:.4rem 0 0;font-size:.88rem;color:var(--muted);}
+  .bank .tags{margin-top:auto;padding-top:.7rem;display:flex;gap:.35rem;flex-wrap:wrap;}
+  .tag{font-size:.74rem;font-weight:700;background:var(--warn-bg);color:var(--warn);padding:.15rem .55rem;border-radius:6px;}
+  .tag.t2{background:var(--ok-bg);color:var(--ok);}
+  .tag.t3{background:var(--soft);color:var(--navy);}
+  .bank details{margin-top:.6rem;font-size:.86rem;color:var(--muted);}
+  .bank summary{cursor:pointer;font-weight:600;color:var(--navy);}
+  .bank .fav{align-self:flex-end;background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);margin:-.3rem -.3rem 0 0;}
+  .bank .fav[aria-pressed="true"]{color:var(--gold);}
+  .empty{color:var(--muted);font-style:italic;display:none;}
+
+  /* Checklist */
+  fieldset{border:none;padding:0;margin:0 0 1rem;}
+  .check-item{display:flex;gap:.7rem;align-items:flex-start;padding:.7rem 0;border-bottom:1px dashed var(--border);}
+  .check-item input{margin-top:.3rem;width:1.15rem;height:1.15rem;flex:none;accent-color:var(--navy-2);}
+  .check-item label{font-size:.93rem;flex:1;cursor:pointer;}
+  .check-item label b{color:var(--navy);}
+  .check-item small{display:block;color:var(--muted);}
+  .check-item .ref{font-size:.74rem;color:var(--muted);font-style:italic;}
+  .check-item .w{font-size:.72rem;background:var(--soft);color:var(--navy);padding:.1rem .5rem;border-radius:99px;font-weight:700;flex:none;}
+  .actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.5rem;}
+  .name-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;}
+  .name-row input{font:inherit;padding:.5rem .75rem;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);flex:1;min-width:200px;}
+  #resultado{margin-top:1rem;padding:1rem;border-radius:10px;display:none;}
+  #resultado.ok{background:var(--ok-bg);color:var(--ok);display:block;}
+  #resultado.warn{background:var(--warn-bg);color:var(--warn);display:block;}
+  #resultado.bad{background:var(--bad-bg);color:var(--bad);display:block;}
+  #resultado h4{margin:0 0 .3rem;font-size:1.02rem;}
+  #resultado ul{margin:.4rem 0 0;padding-left:1.2rem;font-size:.9rem;}
+  .score-ring{display:flex;align-items:center;gap:1rem;}
+  .score-ring .pct{font-size:2rem;font-weight:800;line-height:1;}
+  .history{margin-top:1.2rem;font-size:.86rem;color:var(--muted);}
+  .history li{margin:.2rem 0;}
+
+  /* Quiz */
+  .q{border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.9rem;background:var(--soft-2);}
+  .q p{margin:0 0 .6rem;font-weight:600;}
+  .q .opt{display:block;width:100%;text-align:left;font:inherit;font-size:.9rem;padding:.5rem .8rem;margin:.3rem 0;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);cursor:pointer;}
+  .q .opt:hover:not(:disabled){border-color:var(--navy);}
+  .q .opt.right{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);}
+  .q .opt.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);}
+  .q .fb{display:none;font-size:.86rem;color:var(--muted);margin-top:.4rem;}
+  .q.done .fb{display:block;}
+
+  /* Glosario */
+  .gloss{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}
+  .gloss div{border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;background:var(--soft-2);font-size:.88rem;color:var(--muted);}
+  .gloss b{color:var(--navy);display:block;}
+
+  .toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:var(--card);padding:.6rem 1.1rem;border-radius:10px;font-size:.88rem;transition:transform .3s;z-index:50;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+
+  footer{text-align:center;color:var(--muted);font-size:.8rem;padding:1.5rem 1rem 2.5rem;}
+
+  @media (max-width:520px){
+    header.hero{padding:2.8rem 1rem 3rem;} header.hero h1{font-size:1.3rem;}
+    section.card{padding:1.2rem;} .meter{grid-template-columns:100px 1fr 24px;}
+  }
+  @media print{
+    nav.toc,.theme-btn,.toolbar,.tabs,button,.toast{display:none!important;}
+    .tab-panel{display:block!important;} body{background:#fff;} section.card{box-shadow:none;break-inside:avoid;}
+    #sec-quiz,#sec-glosario{display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="hero">
+  <button class="theme-btn" id="themeBtn" aria-label="Cambiar entre modo claro y oscuro">🌙 Modo oscuro</button>
+  <h1>Explorador Comparativo: Bancos de Recursos, LMS y CMS</h1>
+  <p>Recurso Educativo Digital Abierto (REA) — Actividad 2, Unidad 2. Gestión de Recursos Educativos Digitales, Maestría en Recursos Digitales Aplicados a la Educación, Universidad de Cartagena.</p>
+</header>
+
+<nav class="toc" aria-label="Secciones">
+  <div class="in">
+    <a href="#sec-intro">Inicio</a>
+    <a href="#sec-comparativa">1. Comparativa</a>
+    <a href="#sec-lmscms">LMS vs CMS</a>
+    <a href="#sec-directorio">2. Directorio</a>
+    <a href="#sec-checklist">3. Checklist</a>
+    <a href="#sec-quiz">Reto rápido</a>
+    <a href="#sec-glosario">Glosario</a>
+  </div>
+  <div class="progress" aria-hidden="true"><i id="scrollBar"></i></div>
+</nav>
+
+<main id="main">
+
+  <!-- INTRO -->
+  <section class="card" id="sec-intro" aria-labelledby="h-intro">
+    <h2 id="h-intro">¿Cómo usar este explorador?</h2>
+    <p class="lead">Este REA es el momento de <b>profundización activa</b> del MOOC: aquí ya no solo lees, sino que comparas, filtras y decides. Recorre las tres secciones principales en orden.</p>
+    <div class="stats">
+      <div class="stat"><b>3</b><span>Plataformas LMS comparables</span></div>
+      <div class="stat"><b>3</b><span>Bancos de recursos abiertos</span></div>
+      <div class="stat"><b>5</b><span>Criterios de calidad evaluables</span></div>
+      <div class="stat"><b id="progTxt">0 / 3</b><span>Secciones exploradas</span></div>
+    </div>
+  </section>
+
+  <!-- 1. COMPARATIVA -->
+  <section class="card" id="sec-comparativa" aria-labelledby="h-comparativa">
+    <h2 id="h-comparativa"><span class="num">1</span> Tabla comparativa interactiva</h2>
+    <p class="lead">Explora las diferencias entre tres arquitecturas LMS reconocidas y el escenario de e-learning (CBT, IBT o WBT) asociado a cada una. Usa las flechas ← → del teclado para cambiar de pestaña.</p>
+
+    <div class="tabs" role="tablist" aria-label="Plataformas LMS" id="lmsTabs">
+      <button class="tab-btn" role="tab" id="t-moodle" aria-controls="moodle" aria-selected="true" data-target="moodle">Moodle</button>
+      <button class="tab-btn" role="tab" id="t-blackboard" aria-controls="blackboard" aria-selected="false" tabindex="-1" data-target="blackboard">Blackboard</button>
+      <button class="tab-btn" role="tab" id="t-sakai" aria-controls="sakai" aria-selected="false" tabindex="-1" data-target="sakai">Sakai</button>
+    </div>
+
+    <div class="tab-panel active" id="moodle" role="tabpanel" aria-labelledby="t-moodle">
+      <p class="platform-title">Moodle</p>
+      <span class="badge">Escenario: WBT (Web Based Training)</span><span class="badge alt">Código abierto</span>
+      <dl class="features">
+        <dt>Naturaleza</dt><dd>LMS de código abierto, ampliamente usado en instituciones educativas de todo el mundo.</dd>
+        <dt>Características principales</dt><dd>Foros de discusión, cuestionarios, calificaciones, seguimiento de progreso, integración con videostreaming y comunidades en línea.</dd>
+        <dt>Por qué WBT</dt><dd>Aprovecha al máximo la conexión permanente a internet: foros activos, contenidos multimedia embebidos y comunidades de aprendizaje colaborativas.</dd>
+        <dt>Ideal para</dt><dd>Instituciones que buscan personalización total y bajo costo de licenciamiento.</dd>
+      </dl>
+      <div class="meters" aria-label="Perfil de Moodle">
+        <div class="meter"><span>Colaboración</span><div class="bar"><i style="width:90%"></i></div><b>9</b></div>
+        <div class="meter"><span>Personalización</span><div class="bar"><i style="width:95%"></i></div><b>10</b></div>
+        <div class="meter"><span>Analítica</span><div class="bar"><i style="width:65%"></i></div><b>7</b></div>
+        <div class="meter"><span>Asincronía</span><div class="bar"><i style="width:70%"></i></div><b>7</b></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="blackboard" role="tabpanel" aria-labelledby="t-blackboard">
+      <p class="platform-title">Blackboard</p>
+      <span class="badge">Escenario: WBT (Web Based Training)</span><span class="badge alt">Comercial</span>
+      <dl class="features">
+        <dt>Naturaleza</dt><dd>LMS comercial, muy usado en educación superior, con fuerte enfoque en analítica de aprendizaje.</dd>
+        <dt>Características principales</dt><dd>Videoconferencia integrada (Collaborate), calificación avanzada, reportes de desempeño, integración con sistemas institucionales.</dd>
+        <dt>Por qué WBT</dt><dd>Combina sesiones sincrónicas en línea con comunidades de curso, apoyándose fuertemente en la conectividad web.</dd>
+        <dt>Ideal para</dt><dd>Universidades que necesitan soporte empresarial, sesiones en vivo y reportes institucionales.</dd>
+      </dl>
+      <div class="meters" aria-label="Perfil de Blackboard">
+        <div class="meter"><span>Colaboración</span><div class="bar"><i style="width:80%"></i></div><b>8</b></div>
+        <div class="meter"><span>Personalización</span><div class="bar"><i style="width:55%"></i></div><b>6</b></div>
+        <div class="meter"><span>Analítica</span><div class="bar"><i style="width:95%"></i></div><b>9</b></div>
+        <div class="meter"><span>Asincronía</span><div class="bar"><i style="width:60%"></i></div><b>6</b></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="sakai" role="tabpanel" aria-labelledby="t-sakai">
+      <p class="platform-title">Sakai</p>
+      <span class="badge">Escenario: IBT (Internet Based Training)</span><span class="badge alt">Código abierto</span>
+      <dl class="features">
+        <dt>Naturaleza</dt><dd>LMS de código abierto, impulsado por un consorcio de universidades para la colaboración académica.</dd>
+        <dt>Características principales</dt><dd>Espacios de trabajo colaborativo, gestión de contenidos de curso, herramientas de evaluación asíncrona.</dd>
+        <dt>Por qué IBT</dt><dd>Su uso típico es asíncrono: los estudiantes acceden a materiales y actividades en momentos distintos, sin depender de sesiones en vivo.</dd>
+        <dt>Ideal para</dt><dd>Comunidades académicas que priorizan el trabajo colaborativo e investigativo.</dd>
+      </dl>
+      <div class="meters" aria-label="Perfil de Sakai">
+        <div class="meter"><span>Colaboración</span><div class="bar"><i style="width:85%"></i></div><b>9</b></div>
+        <div class="meter"><span>Personalización</span><div class="bar"><i style="width:65%"></i></div><b>7</b></div>
+        <div class="meter"><span>Analítica</span><div class="bar"><i style="width:50%"></i></div><b>5</b></div>
+        <div class="meter"><span>Asincronía</span><div class="bar"><i style="width:90%"></i></div><b>9</b></div>
+      </div>
+    </div>
+
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:0">* Las barras son una valoración orientativa elaborada para este REA, no una medición oficial.</p>
+
+    <div class="toggle"><button class="ghost" id="tblBtn" aria-expanded="false" aria-controls="tblWrap">📊 Ver las tres plataformas lado a lado</button></div>
+    <div class="table-wrap" id="tblWrap" hidden>
+      <table>
+        <caption class="sr" style="position:absolute;left:-999px">Comparación de Moodle, Blackboard y Sakai</caption>
+        <thead><tr><th scope="col">Criterio</th><th scope="col">Moodle</th><th scope="col">Blackboard</th><th scope="col">Sakai</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Licencia</th><td>Código abierto</td><td>Comercial</td><td>Código abierto</td></tr>
+          <tr><th scope="row">Escenario</th><td>WBT</td><td>WBT</td><td>IBT</td></tr>
+          <tr><th scope="row">Fortaleza</th><td>Foros, cuestionarios y personalización</td><td>Analítica y videoconferencia</td><td>Colaboración asíncrona</td></tr>
+          <tr><th scope="row">Sincronía</th><td>Mixta</td><td>Alta (Collaborate)</td><td>Principalmente asíncrona</td></tr>
+          <tr><th scope="row">Origen</th><td>Comunidad global</td><td>Empresa privada</td><td>Consorcio de universidades</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- LMS vs CMS -->
+  <section class="card" id="sec-lmscms" aria-labelledby="h-lmscms">
+    <h2 id="h-lmscms">LMS vs CMS y escenarios de e-learning</h2>
+    <p class="lead">Distinción central: <b>gestión del aprendizaje</b> frente a <b>gestión del contenido</b>. (Universidad de Cartagena, s.f.-b)</p>
+    <div class="two">
+      <div class="box"><h4>LMS — Learning Management System</h4>
+        <p>Crea y gestiona contenidos educativos, registra usuarios e interconecta docentes y estudiantes.</p>
+        <ul><li>Foros, chats y cursos en línea</li><li>Seguimiento pedagógico y calificaciones</li><li>Ej.: Moodle, Blackboard, Sakai</li></ul></div>
+      <div class="box"><h4>CMS — Content Management System</h4>
+        <p>Administra los contenidos de un sitio web mediante una base de datos, sin foco en el seguimiento pedagógico.</p>
+        <ul><li>Publicación y edición de contenidos</li><li>Gestión de páginas y medios</li><li>Ej.: WordPress, Joomla, Drupal</li></ul></div>
+    </div>
+    <h3>Escenarios de e-learning: elige el tuyo</h3>
+    <p class="lead" style="margin-bottom:.5rem">Selecciona una característica y descubre a qué escenario corresponde.</p>
+    <div class="toolbar">
+      <select id="scenSel" aria-label="Características del escenario">
+        <option value="">— Elige una situación —</option>
+        <option value="cbt">Aprendo con un programa instalado en el computador, sin depender de la red</option>
+        <option value="ibt">Accedo a materiales cuando puedo, sin sesiones en vivo</option>
+        <option value="wbt">Participo en comunidades en línea y veo videostreaming</option>
+      </select>
+    </div>
+    <div id="scenOut" class="box" role="status" aria-live="polite" style="display:none"></div>
+  </section>
+
+  <!-- 2. DIRECTORIO -->
+  <section class="card" id="sec-directorio" aria-labelledby="h-directorio">
+    <h2 id="h-directorio"><span class="num">2</span> Directorio de bancos de recursos abiertos</h2>
+    <p class="lead">Enlaces directos a tres repositorios reconocidos internacionalmente, con una nota sobre su tipo de licencia y proceso de curaduría. Busca, filtra y marca tus favoritos ⭐.</p>
+
+    <div class="toolbar">
+      <input type="search" id="bankSearch" placeholder="Buscar por nombre o tema…" aria-label="Buscar bancos de recursos">
+      <select id="bankLang" aria-label="Filtrar por idioma">
+        <option value="">Todos los idiomas</option><option value="es">Español</option><option value="en">Inglés</option>
+      </select>
+      <select id="bankCur" aria-label="Filtrar por curaduría">
+        <option value="">Toda curaduría</option><option value="pares">Revisión por pares</option><option value="cc">Licencia Creative Commons</option><option value="ed">Editorial</option>
+      </select>
+      <button class="ghost" id="favOnly" aria-pressed="false">⭐ Solo favoritos</button>
+    </div>
+
+    <div class="bank-grid" id="bankGrid">
+      <article class="bank" data-name="merlot" data-lang="en" data-cur="pares" data-text="multimedia educational resource learning online teaching revisión pares catálogo internacional">
+        <button class="fav" aria-pressed="false" aria-label="Marcar MERLOT como favorito" data-id="merlot">★</button>
+        <h3><a href="https://www.merlot.org" target="_blank" rel="noopener">MERLOT ↗</a></h3>
+        <p>Multimedia Educational Resource for Learning and Online Teaching. Catálogo internacional de materiales revisados por pares.</p>
+        <details><summary>Cómo se usa en el curso</summary>Sirve como fuente de materiales con evaluación de calidad previa, útil para el criterio de <b>Calidad</b>.</details>
+        <div class="tags"><span class="tag">Curaduría: revisión por pares</span><span class="tag t3">Inglés</span></div>
+      </article>
+      <article class="bank" data-name="oer" data-lang="en" data-cur="cc" data-text="oer commons recursos educativos abiertos biblioteca digital nivel asignatura creative commons">
+        <button class="fav" aria-pressed="false" aria-label="Marcar OER Commons como favorito" data-id="oer">★</button>
+        <h3><a href="https://www.oercommons.org" target="_blank" rel="noopener">OER Commons ↗</a></h3>
+        <p>Biblioteca digital de Recursos Educativos Abiertos, organizada por nivel educativo y asignatura.</p>
+        <details><summary>Cómo se usa en el curso</summary>Permite reutilizar y adaptar recursos gracias a sus licencias abiertas, relacionado con la <b>Pertinencia</b>.</details>
+        <div class="tags"><span class="tag t2">Licencia: Creative Commons</span><span class="tag t3">Inglés</span></div>
+      </article>
+      <article class="bank" data-name="edu30" data-lang="es" data-cur="ed" data-text="educación 3.0 portal español innovación educativa digital editorial revista">
+        <button class="fav" aria-pressed="false" aria-label="Marcar Educación 3.0 como favorito" data-id="edu30">★</button>
+        <h3><a href="https://www.educaciontrespuntocero.com" target="_blank" rel="noopener">Educación 3.0 ↗</a></h3>
+        <p>Portal en español que difunde recursos e innovación educativa digital.</p>
+        <details><summary>Cómo se usa en el curso</summary>Referente hispanohablante para estar al día en tendencias e innovación educativa.</details>
+        <div class="tags"><span class="tag">Curaduría: editorial</span><span class="tag t3">Español</span></div>
+      </article>
+    </div>
+    <p class="empty" id="bankEmpty">No hay bancos que coincidan con tu búsqueda.</p>
+  </section>
+
+  <!-- 3. CHECKLIST -->
+  <section class="card" id="sec-checklist" aria-labelledby="h-checklist">
+    <h2 id="h-checklist"><span class="num">3</span> Checklist interactivo de calidad</h2>
+    <p class="lead">Marca si un recurso hipotético que estés evaluando cumple cada criterio, y obtén una recomendación de publicación con puntaje, observaciones y reporte descargable.</p>
+
+    <div class="name-row">
+      <input type="text" id="resName" placeholder="Nombre del recurso a evaluar (opcional)" aria-label="Nombre del recurso a evaluar" maxlength="80">
+    </div>
+
+    <fieldset>
+      <legend class="sr" style="position:absolute;left:-999px">Criterios de calidad</legend>
+      <div class="check-item">
+        <input type="checkbox" id="c1" data-w="25" data-n="Calidad" data-tip="Revisa la exactitud del contenido, su actualización y la estabilidad técnica (enlaces, formatos).">
+        <label for="c1"><b>Calidad</b><small>El contenido es correcto, está actualizado y técnicamente estable.</small><span class="ref">Aguilar Juárez et al. (2014)</span></label><span class="w">25%</span>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c2" data-w="25" data-n="Pertinencia" data-tip="Verifica la coherencia con los objetivos de aprendizaje y el público al que va dirigido.">
+        <label for="c2"><b>Pertinencia</b><small>El recurso es coherente con los objetivos de aprendizaje y el público al que va dirigido.</small><span class="ref">Belloch Ortí (2013)</span></label><span class="w">25%</span>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c3" data-w="25" data-n="Usabilidad" data-tip="Mejora la navegación, el diseño centrado en el usuario y la accesibilidad.">
+        <label for="c3"><b>Usabilidad</b><small>Es fácil de navegar, accesible y con un diseño centrado en el usuario.</small><span class="ref">Marzal et al. (2008)</span></label><span class="w">25%</span>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c4" data-w="15" data-n="Reutilización y licencia" data-tip="Define una licencia abierta (p. ej. Creative Commons) y metadatos para facilitar su reutilización.">
+        <label for="c4"><b>Reutilización y licencia</b><small>Tiene licencia abierta clara y metadatos que permiten reutilizarlo.</small><span class="ref">LORI — Nesbit et al. (2003)</span></label><span class="w">15%</span>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="c5" data-w="10" data-n="Coherencia didáctica" data-tip="Alinea objetivos, actividades y evaluación (rúbrica COdA).">
+        <label for="c5"><b>Coherencia didáctica</b><small>Objetivos, actividades y evaluación están alineados.</small><span class="ref">COdA — Domínguez Romero et al. (2013)</span></label><span class="w">10%</span>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="primary" id="btnEval">Evaluar recurso</button>
+      <button class="ghost" id="btnAll">Marcar todo</button>
+      <button class="ghost" id="btnReset">Limpiar</button>
+      <button class="ghost" id="btnCopy">📋 Copiar reporte</button>
+      <button class="ghost" id="btnDl">⬇ Descargar .txt</button>
+      <button class="ghost" id="btnPrint">🖨 Imprimir</button>
+    </div>
+    <div id="resultado" role="status" aria-live="polite"></div>
+    <div class="history" id="histBox" hidden>
+      <b>Últimas evaluaciones (guardadas en este navegador)</b>
+      <ul id="histList"></ul>
+      <button class="ghost" id="btnClearHist">Borrar historial</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="card" id="sec-quiz" aria-labelledby="h-quiz">
+    <h2 id="h-quiz">Reto rápido de repaso</h2>
+    <p class="lead">Cuatro preguntas para comprobar lo explorado. Recibirás retroalimentación inmediata. (La autoevaluación oficial del curso está en Google Forms, Tema 3.)</p>
+    <div id="quiz"></div>
+    <div class="actions"><button class="ghost" id="quizReset">Reiniciar reto</button><b id="quizScore" style="align-self:center;color:var(--navy)"></b></div>
+  </section>
+
+  <!-- GLOSARIO -->
+  <section class="card" id="sec-glosario" aria-labelledby="h-gloss">
+    <h2 id="h-gloss">Glosario esencial</h2>
+    <div class="toolbar"><input type="search" id="glossSearch" placeholder="Buscar término…" aria-label="Buscar en el glosario"></div>
+    <div class="gloss" id="gloss">
+      <div data-t="red recurso educativo digital"><b>RED</b>Recurso Educativo Digital: contenido formativo en formato digital que puede almacenarse, manipularse y gestionarse.</div>
+      <div data-t="rea recurso educativo abierto"><b>REA</b>Recurso Educativo Abierto: material con licencia que permite su uso, adaptación y redistribución.</div>
+      <div data-t="lms learning management system"><b>LMS</b>Sistema de gestión del aprendizaje: cursos, usuarios, foros, evaluación y seguimiento.</div>
+      <div data-t="cms content management system"><b>CMS</b>Sistema de gestión de contenidos de un sitio web mediante base de datos.</div>
+      <div data-t="cbt computer based training"><b>CBT</b>Computer Based Training: formación centrada en la interacción máquina-usuario.</div>
+      <div data-t="ibt internet based training"><b>IBT</b>Internet Based Training: formación vía internet, de carácter asíncrono.</div>
+      <div data-t="wbt web based training"><b>WBT</b>Web Based Training: incorpora comunidades en línea y videostreaming.</div>
+      <div data-t="mooc curso masivo abierto en línea"><b>MOOC</b>Curso Masivo Abierto en Línea.</div>
+      <div data-t="lori learning object review instrument"><b>LORI</b>Instrumento para valorar objetos de aprendizaje (accesibilidad, interacción, reutilización).</div>
+      <div data-t="coda rúbrica calidad materiales educativos"><b>COdA</b>Rúbrica para evaluar la calidad de materiales educativos digitales.</div>
+    </div>
+    <p class="empty" id="glossEmpty">Sin resultados.</p>
+  </section>
+
+</main>
+
+<footer>
+  Explorador Comparativo — REA de elaboración propia. Actividad 2, Unidad 2, Gestión de Recursos Educativos Digitales, Universidad de Cartagena.<br>
+  Autor: Ing. Jhony Antonio Gutiérrez Solórzano · Docente: Lizeth Patricia Pardo Wandurraga.
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  const $ = (s,c=document)=>c.querySelector(s);
+  const $$ = (s,c=document)=>Array.from(c.querySelectorAll(s));
+  const store = {
+    get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+    set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+  };
+  function toast(msg){
+    const t=$('#toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(toast.id); toast.id=setTimeout(()=>t.classList.remove('show'),2200);
+  }
+
+  /* ---- Tema ---- */
+  const root=document.documentElement, themeBtn=$('#themeBtn');
+  function setTheme(t){ root.dataset.theme=t; themeBtn.textContent=t==='dark'?'☀️ Modo claro':'🌙 Modo oscuro'; store.set('rea-theme',t); }
+  setTheme(store.get('rea-theme', matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+  themeBtn.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+
+  /* ---- Progreso de exploración ---- */
+  const explored = new Set(store.get('rea-explored',[]));
+  function mark(k){ explored.add(k); store.set('rea-explored',[...explored]); $('#progTxt').textContent=explored.size+' / 3'; }
+  $('#progTxt').textContent=explored.size+' / 3';
+
+  const bar=$('#scrollBar');
+  const links=$$('nav.toc a'), secs=links.map(a=>$(a.getAttribute('href')));
+  function onScroll(){
+    const h=document.documentElement; const max=h.scrollHeight-h.clientHeight;
+    bar.style.width=(max>0?h.scrollTop/max*100:0)+'%';
+    let cur=0; secs.forEach((s,i)=>{ if(s.getBoundingClientRect().top<120) cur=i; });
+    links.forEach((a,i)=>a.classList.toggle('cur',i===cur));
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  /* ---- 1. Tabs accesibles ---- */
+  const tabs=$$('.tab-btn');
+  function selectTab(btn,focus){
+    tabs.forEach(b=>{ b.setAttribute('aria-selected','false'); b.tabIndex=-1; });
+    $$('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.setAttribute('aria-selected','true'); btn.tabIndex=0;
+    $('#'+btn.dataset.target).classList.add('active');
+    if(focus) btn.focus();
+    mark('comparativa');
+  }
+  tabs.forEach((b,i)=>{
+    b.addEventListener('click',()=>selectTab(b));
+    b.addEventListener('keydown',e=>{
+      let n=null;
+      if(e.key==='ArrowRight') n=tabs[(i+1)%tabs.length];
+      if(e.key==='ArrowLeft') n=tabs[(i-1+tabs.length)%tabs.length];
+      if(e.key==='Home') n=tabs[0];
+      if(e.key==='End') n=tabs[tabs.length-1];
+      if(n){ e.preventDefault(); selectTab(n,true); }
+    });
+  });
+  $('#tblBtn').addEventListener('click',function(){
+    const w=$('#tblWrap'), open=w.hidden;
+    w.hidden=!open; this.setAttribute('aria-expanded',open);
+    this.textContent=open?'✖ Ocultar tabla comparativa':'📊 Ver las tres plataformas lado a lado';
+    mark('comparativa');
+  });
+
+  /* ---- Escenarios ---- */
+  const SC={
+    cbt:['CBT — Computer Based Training','Centrado en la interacción máquina-usuario; no depende necesariamente de la red.','Ejemplo: tutoriales instalados localmente o en CD/USB.'],
+    ibt:['IBT — Internet Based Training','Formación vía internet de carácter asíncrono: el estudiante accede cuando puede.','Ejemplo típico: Sakai.'],
+    wbt:['WBT — Web Based Training','Incorpora comunidades en línea y videostreaming, aprovechando la conexión permanente.','Ejemplos: Moodle y Blackboard.']
+  };
+  $('#scenSel').addEventListener('change',function(){
+    const o=$('#scenOut'); const s=SC[this.value];
+    if(!s){ o.style.display='none'; return; }
+    o.style.display='block'; o.innerHTML='<h4>'+s[0]+'</h4><p>'+s[1]+'</p><p><b>'+s[2]+'</b></p>';
+  });
+
+  /* ---- 2. Directorio ---- */
+  const favs=new Set(store.get('rea-favs',[]));
+  const banks=$$('.bank');
+  banks.forEach(b=>{
+    const btn=$('.fav',b), id=btn.dataset.id;
+    btn.setAttribute('aria-pressed',favs.has(id));
+    btn.addEventListener('click',()=>{
+      favs.has(id)?favs.delete(id):favs.add(id);
+      btn.setAttribute('aria-pressed',favs.has(id)); store.set('rea-favs',[...favs]);
+      filterBanks();
+    });
+    $('a',b).addEventListener('click',()=>mark('directorio'));
+    $('details',b).addEventListener('toggle',()=>mark('directorio'));
+  });
+  function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
+  function filterBanks(){
+    const q=norm($('#bankSearch').value.trim()), lang=$('#bankLang').value, cur=$('#bankCur').value;
+    const fo=$('#favOnly').getAttribute('aria-pressed')==='true'; let n=0;
+    banks.forEach(b=>{
+      const ok=(!q||norm(b.dataset.text+' '+b.dataset.name).includes(q))&&(!lang||b.dataset.lang===lang)&&(!cur||b.dataset.cur===cur)&&(!fo||favs.has($('.fav',b).dataset.id));
+      b.style.display=ok?'':'none'; if(ok)n++;
+    });
+    $('#bankEmpty').style.display=n?'none':'block';
+  }
+  ['input','change'].forEach(ev=>{ $('#bankSearch').addEventListener(ev,filterBanks); $('#bankLang').addEventListener(ev,filterBanks); $('#bankCur').addEventListener(ev,filterBanks); });
+  $('#favOnly').addEventListener('click',function(){ this.setAttribute('aria-pressed',this.getAttribute('aria-pressed')!=='true'); this.style.background=this.getAttribute('aria-pressed')==='true'?'var(--gold)':''; filterBanks(); mark('directorio'); });
+
+  /* ---- 3. Checklist ---- */
+  const checks=$$('#sec-checklist input[type=checkbox]');
+  let lastReport='';
+  function evaluate(){
+    const name=$('#resName').value.trim()||'Recurso sin nombre';
+    const ok=checks.filter(c=>c.checked), no=checks.filter(c=>!c.checked);
+    const score=ok.reduce((a,c)=>a+ +c.dataset.w,0);
+    const core=['c1','c2','c3'].every(id=>$('#'+id).checked);
+    const el=$('#resultado'); let cls,title;
+    if(core && score>=85){ cls='ok'; title='✅ Listo para publicar en un banco de recursos'; }
+    else if(score>=50){ cls='warn'; title='⚠️ Requiere ajustes antes de publicarse'; }
+    else { cls='bad'; title='⛔ No está listo: necesita una revisión profunda'; }
+    el.className=cls;
+    el.innerHTML='<div class="score-ring"><div class="pct">'+score+'%</div><div><h4>'+title+'</h4><span style="font-size:.88rem">'+ok.length+' de '+checks.length+' criterios cumplidos. '+(core?'Cumple los tres criterios base (calidad, pertinencia y usabilidad).':'Falta cumplir al menos uno de los tres criterios base.')+'</span></div></div>'
+      +(no.length?'<ul>'+no.map(c=>'<li><b>'+c.dataset.n+':</b> '+c.dataset.tip+'</li>').join('')+'</ul>':'');
+    lastReport='EVALUACIÓN DE RECURSO EDUCATIVO DIGITAL\nRecurso: '+name+'\nFecha: '+new Date().toLocaleString('es-CO')+'\nPuntaje: '+score+'%\nResultado: '+title.replace(/^\S+\s/,'')
+      +'\n\nCumple:\n'+(ok.map(c=>' - '+c.dataset.n).join('\n')||' (ninguno)')
+      +'\n\nPor mejorar:\n'+(no.map(c=>' - '+c.dataset.n+': '+c.dataset.tip).join('\n')||' (ninguno)')
+      +'\n\nREA: Explorador Comparativo — Universidad de Cartagena.';
+    const h=store.get('rea-hist',[]); h.unshift({n:name,s:score,d:new Date().toLocaleString('es-CO')}); store.set('rea-hist',h.slice(0,5));
+    renderHist(); mark('checklist'); el.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }
+  function renderHist(){
+    const h=store.get('rea-hist',[]); $('#histBox').hidden=!h.length;
+    $('#histList').innerHTML=h.map(x=>'<li>'+x.d+' — <b>'+esc(x.n)+'</b>: '+x.s+'%</li>').join('');
+  }
+  function esc(s){ return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  $('#btnEval').addEventListener('click',evaluate);
+  $('#btnAll').addEventListener('click',()=>{ checks.forEach(c=>c.checked=true); });
+  $('#btnReset').addEventListener('click',()=>{ checks.forEach(c=>c.checked=false); $('#resName').value=''; $('#resultado').className=''; lastReport=''; });
+  $('#btnClearHist').addEventListener('click',()=>{ store.set('rea-hist',[]); renderHist(); });
+  function needReport(){ if(!lastReport){ toast('Primero pulsa "Evaluar recurso"'); return false; } return true; }
+  $('#btnCopy').addEventListener('click',()=>{
+    if(!needReport())return;
+    (navigator.clipboard?navigator.clipboard.writeText(lastReport):Promise.reject()).then(()=>toast('Reporte copiado'),()=>toast('No se pudo copiar'));
+  });
+  $('#btnDl').addEventListener('click',()=>{
+    if(!needReport())return;
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([lastReport],{type:'text/plain;charset=utf-8'}));
+    a.download='evaluacion-recurso.txt'; a.click(); URL.revokeObjectURL(a.href);
+  });
+  $('#btnPrint').addEventListener('click',()=>{ if(needReport()) print(); });
+  renderHist();
+
+  /* ---- Quiz ---- */
+  const QS=[
+    {q:'¿Cuál es la diferencia central entre un LMS y un CMS?',o:['El LMS gestiona el aprendizaje y el CMS gestiona contenidos','El LMS solo sirve para videos','El CMS tiene foros y calificaciones','No hay diferencia'],a:0,f:'El LMS se centra en el seguimiento pedagógico; el CMS administra contenidos de un sitio web.'},
+    {q:'¿Qué escenario de e-learning es asíncrono y se asocia típicamente a Sakai?',o:['CBT','IBT','WBT','LMS'],a:1,f:'IBT (Internet Based Training) es de carácter asíncrono.'},
+    {q:'¿Qué banco de recursos cataloga materiales revisados por pares?',o:['Educación 3.0','OER Commons','MERLOT','Moodle'],a:2,f:'MERLOT se caracteriza por la revisión por pares de sus materiales.'},
+    {q:'¿Cuáles son los tres criterios base del checklist?',o:['Costo, tamaño y color','Calidad, pertinencia y usabilidad','Velocidad, licencia y marca','Autor, fecha y formato'],a:1,f:'Calidad, pertinencia y usabilidad (Aguilar Juárez et al., 2014; Marzal et al., 2008).'}
+  ];
+  let answered=0, correct=0;
+  function buildQuiz(){
+    answered=0; correct=0; $('#quizScore').textContent='';
+    $('#quiz').innerHTML=QS.map((x,i)=>'<div class="q" data-i="'+i+'"><p>'+(i+1)+'. '+x.q+'</p>'
+      +x.o.map((o,j)=>'<button class="opt" data-j="'+j+'">'+o+'</button>').join('')+'<div class="fb"></div></div>').join('');
+    $$('.q').forEach(qe=>{
+      const x=QS[+qe.dataset.i];
+      $$('.opt',qe).forEach(b=>b.addEventListener('click',()=>{
+        if(qe.classList.contains('done'))return;
+        qe.classList.add('done'); const j=+b.dataset.j; answered++;
+        $$('.opt',qe).forEach(o=>{ o.disabled=true; if(+o.dataset.j===x.a)o.classList.add('right'); });
+        if(j===x.a){ correct++; $('.fb',qe).textContent='✅ ¡Correcto! '+x.f; } else { b.classList.add('wrong'); $('.fb',qe).textContent='❌ No es la respuesta. '+x.f; }
+        if(answered===QS.length) $('#quizScore').textContent='Resultado: '+correct+' / '+QS.length+(correct===QS.length?' 🎉':'');
+      }));
+    });
+  }
+  $('#quizReset').addEventListener('click',buildQuiz); buildQuiz();
+
+  /* ---- Glosario ---- */
+  $('#glossSearch').addEventListener('input',function(){
+    const q=norm(this.value.trim()); let n=0;
+    $$('#gloss div').forEach(d=>{ const ok=!q||norm(d.dataset.t+' '+d.textContent).includes(q); d.style.display=ok?'':'none'; if(ok)n++; });
+    $('#glossEmpty').style.display=n?'none':'block';
+  });
+})();
+</script>
+</body>
+</html>
