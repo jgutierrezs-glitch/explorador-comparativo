@@ -24,7 +24,7 @@
   :focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:5px;}
   .skip{position:absolute;left:-999px;top:0;background:var(--gold);color:#000;padding:.5rem 1rem;z-index:99;}
   .skip:focus{left:0;}
-  .site{background:#0f1f42;color:#fff;font-size:.82rem;}
+  .site{position:sticky;top:0;z-index:40;background:#0f1f42;color:#fff;font-size:.82rem;}
   .site .in{max-width:1040px;margin:auto;padding:.45rem 1rem;display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;}
   .site b{margin-right:auto;font-weight:600;color:#c9d4ec;}
   .site a{color:#fff;text-decoration:none;padding:.25rem .7rem;border-radius:999px;font-weight:600;}
@@ -37,13 +37,13 @@
   .theme-btn{position:absolute;top:.7rem;right:.8rem;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.3rem .8rem;cursor:pointer;font-size:.82rem;}
   .demo{display:inline-block;margin-top:.9rem;background:var(--gold);color:#3a2a06;font-weight:700;font-size:.8rem;padding:.25rem .8rem;border-radius:999px;}
 
-  nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
+  nav.toc{position:sticky;top:var(--sitebar,38px);z-index:30;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
   nav.toc .in{max-width:1040px;margin:auto;padding:.45rem 1rem;display:flex;gap:.3rem;overflow-x:auto;}
   nav.toc a{white-space:nowrap;text-decoration:none;font-size:.85rem;font-weight:600;color:var(--navy);padding:.35rem .75rem;border-radius:999px;}
   nav.toc a:hover,nav.toc a.cur{background:var(--navy);color:var(--card);}
 
   main{max-width:1040px;margin:1.2rem auto 3rem;padding:0 1rem;}
-  section.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem;margin-bottom:1.6rem;box-shadow:var(--shadow);scroll-margin-top:60px;}
+  section.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem;margin-bottom:1.6rem;box-shadow:var(--shadow);scroll-margin-top:110px;}
   section.card h2{margin-top:0;font-size:1.2rem;color:var(--navy);}
   .lead{color:var(--muted);margin-top:0;}
   .banner{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:.7rem 1rem;font-size:.88rem;margin-bottom:1rem;}
@@ -87,6 +87,8 @@
   .tag.pend{background:var(--warn-bg);color:var(--warn);}
   .res .fav{position:absolute;top:.6rem;right:.6rem;background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--muted);}
   .res .fav[aria-pressed="true"]{color:var(--gold);}
+  .res a.open{align-self:flex-start;margin-top:.5rem;font-weight:700;font-size:.86rem;text-decoration:none;background:var(--navy);color:var(--card);padding:.35rem .8rem;border-radius:8px;}
+  .res a.open:hover{filter:brightness(1.15);}
   .empty{text-align:center;color:var(--muted);padding:1.5rem;display:none;}
 
   /* Modal */
@@ -173,7 +175,7 @@
   <section class="card" id="sec-explorar" aria-labelledby="h-exp">
     <h2 id="h-exp">Explorar el repositorio</h2>
     <p class="lead">Los recursos se organizan por <b>área del saber</b>, <b>nivel educativo</b> y <b>tipo de recurso</b>, y cada uno lleva metadatos básicos (autor, área, nivel, fecha y licencia), como plantea la propuesta.</p>
-    <div class="banner"><b>Aviso:</b> los recursos, autores y fechas de este boceto son <b>ficticios</b> y solo ilustran el funcionamiento. No son materiales reales de la universidad.</div>
+    <div class="banner"><b>Aviso:</b> este es un boceto. Los recursos marcados <i>Demostración</i> fueron elaborados para ilustrar el repositorio y se abren con el botón «Abrir recurso»; no son materiales oficiales de la universidad. El recurso marcado <i>Externo</i> enlaza a su fuente original con su atribución.</div>
 
     <div class="stats" id="stats"></div>
 
@@ -289,20 +291,19 @@
 
   /* Recursos de ejemplo (ficticios) */
   const SEED=[
-    {id:1,t:'Introducción a la evaluación de RED',tipo:'ova',area:AREAS[0],nivel:NIVELES[1],autor:'Docente de ejemplo A',fecha:'2026-03-12',lic:'CC BY 4.0',vis:128,obj:'Aplicar criterios de calidad, pertinencia y usabilidad a un recurso digital.',desc:'Objeto virtual con actividades de clasificación y retroalimentación inmediata.'},
-    {id:2,t:'Taller de derechos de autor y licencias abiertas',tipo:'guia',area:AREAS[0],nivel:NIVELES[2],autor:'Docente de ejemplo B',fecha:'2026-04-02',lic:'CC BY-SA 4.0',vis:96,obj:'Elegir la licencia Creative Commons adecuada para un recurso propio.',desc:'Guía interactiva con casos para decidir entre las licencias CC.'},
-    {id:3,t:'Tutorial: crear un formulario de autoevaluación',tipo:'video',area:AREAS[0],nivel:NIVELES[1],autor:'Docente de ejemplo C',fecha:'2026-04-18',lic:'CC BY 4.0',vis:210,obj:'Construir un cuestionario con retroalimentación automática.',desc:'Video de 8 minutos paso a paso.'},
-    {id:4,t:'Fundamentos de programación con ejemplos',tipo:'ova',area:AREAS[2],nivel:NIVELES[0],autor:'Docente de ejemplo D',fecha:'2026-02-20',lic:'CC BY-NC 4.0',vis:174,obj:'Reconocer variables, condicionales y ciclos.',desc:'Ejercicios guiados con autocorrección.'},
-    {id:5,t:'Bases de datos relacionales: presentación de clase',tipo:'pres',area:AREAS[2],nivel:NIVELES[0],autor:'Docente de ejemplo E',fecha:'2026-05-05',lic:'CC BY-SA 4.0',vis:64,obj:'Diseñar un modelo entidad-relación sencillo.',desc:'Diapositivas con ejemplos y ejercicios propuestos.'},
-    {id:6,t:'Evaluación diagnóstica de anatomía básica',tipo:'eval',area:AREAS[3],nivel:NIVELES[0],autor:'Docente de ejemplo F',fecha:'2026-03-28',lic:'CC BY-NC-SA 4.0',vis:88,obj:'Diagnosticar saberes previos sobre sistemas del cuerpo.',desc:'Banco de 20 preguntas autoaplicables.'},
-    {id:7,t:'Pódcast: historias de la Cartagena colonial',tipo:'podcast',area:AREAS[1],nivel:NIVELES[2],autor:'Docente de ejemplo G',fecha:'2026-05-14',lic:'CC BY-NC 4.0',vis:53,obj:'Contextualizar procesos históricos de la ciudad.',desc:'Tres episodios de 15 minutos con guía de escucha.'},
-    {id:8,t:'Infografía: ciclo contable',tipo:'info',area:AREAS[4],nivel:NIVELES[0],autor:'Docente de ejemplo H',fecha:'2026-01-30',lic:'CC BY 4.0',vis:142,obj:'Ordenar las etapas del ciclo contable.',desc:'Infografía descargable en alta resolución.'},
-    {id:9,t:'Planeación: estadística descriptiva (unidad 1)',tipo:'plan',area:AREAS[5],nivel:NIVELES[0],autor:'Docente de ejemplo I',fecha:'2026-02-09',lic:'CC BY-SA 4.0',vis:71,obj:'Calcular e interpretar medidas de tendencia central.',desc:'Secuencia de 4 sesiones con evaluación formativa.'},
-    {id:10,t:'Diseño instruccional con el modelo ADDIE',tipo:'guia',area:AREAS[0],nivel:NIVELES[1],autor:'Docente de ejemplo J',fecha:'2026-05-22',lic:'CC BY 4.0',vis:119,obj:'Planificar un curso virtual en las cinco fases del modelo.',desc:'Guía con plantilla descargable.'},
-    {id:11,t:'Gestión de proyectos: video introductorio',tipo:'video',area:AREAS[4],nivel:NIVELES[1],autor:'Docente de ejemplo K',fecha:'2026-04-09',lic:'CC BY-NC 4.0',vis:80,obj:'Identificar fases y roles de un proyecto.',desc:'Video de 6 minutos con ejemplos del sector.'},
-    {id:12,t:'Laboratorio virtual: leyes de los gases',tipo:'ova',area:AREAS[5],nivel:NIVELES[0],autor:'Docente de ejemplo L',fecha:'2026-03-03',lic:'CC BY-SA 4.0',vis:156,obj:'Relacionar presión, volumen y temperatura mediante simulación.',desc:'Simulador interactivo con guía de laboratorio.'},
-    {id:13,t:'Ética del cuidado: presentación y lecturas',tipo:'pres',area:AREAS[3],nivel:NIVELES[1],autor:'Docente de ejemplo M',fecha:'2026-05-30',lic:'CC BY-NC-SA 4.0',vis:39,obj:'Debatir dilemas éticos en la práctica profesional.',desc:'Diapositivas y casos para discusión en clase.'},
-    {id:14,t:'Alfabetización digital docente: rutas de formación',tipo:'plan',area:AREAS[0],nivel:NIVELES[2],autor:'Docente de ejemplo N',fecha:'2026-06-11',lic:'CC BY 4.0',vis:102,obj:'Diseñar un plan personal de formación en competencias digitales.',desc:'Planeación modular de 6 semanas.'}
+    {id:1,t:'Introducción a la evaluación de RED',tipo:'ova',area:AREAS[0],nivel:NIVELES[1],autor:'Elaboración propia (demo)',fecha:'2026-09-22',lic:'CC BY 4.0',vis:128,url:'recursos/ova-evaluacion-red.html',origen:'Demostración',obj:'Aplicar los criterios de calidad, pertinencia y usabilidad para decidir si un recurso digital está listo para publicarse.',desc:'Actividad interactiva: clasifica situaciones según calidad, pertinencia y usabilidad.'},
+    {id:2,t:'Taller de derechos de autor y licencias abiertas',tipo:'guia',area:AREAS[0],nivel:NIVELES[2],autor:'Elaboración propia (demo)',fecha:'2026-09-24',lic:'CC BY-SA 4.0',vis:96,url:'recursos/guia-licencias-cc.html',origen:'Demostración',obj:'Elegir la licencia Creative Commons adecuada para un recurso educativo propio.',desc:'Asistente que recomienda la licencia Creative Commons según el uso que quieras permitir.'},
+    {id:3,t:'Video: Recursos digitales (recurso externo)',tipo:'video',area:AREAS[0],nivel:NIVELES[1],autor:'Canal «Servicio de Planificación y Mejora de la Docencia» (YouTube)',fecha:'2019-01-01',lic:'Según el autor original',vis:210,url:'recursos/video-recursos-digitales.html',origen:'Externo',obj:'Introducir el concepto de Recurso Educativo Digital, sus características y su finalidad educativa.',desc:'Video introductorio sobre Recursos Educativos Digitales, enlazado desde su fuente original en YouTube.'},
+    {id:4,t:'Laboratorio virtual: leyes de los gases',tipo:'ova',area:AREAS[5],nivel:NIVELES[0],autor:'Elaboración propia (demo)',fecha:'2026-09-18',lic:'CC BY-SA 4.0',vis:156,url:'recursos/ova-gases.html',origen:'Demostración',obj:'Relacionar presión, volumen y temperatura de un gas ideal mediante simulación.',desc:'Simulador interactivo de presión, volumen y temperatura con actividad guiada.'},
+    {id:5,t:'Fundamentos de programación con ejemplos',tipo:'ova',area:AREAS[2],nivel:NIVELES[0],autor:'Elaboración propia (demo)',fecha:'2026-09-10',lic:'CC BY-NC 4.0',vis:174,url:'recursos/ova-programacion.html',origen:'Demostración',obj:'Reconocer variables, condicionales y ciclos leyendo programas sencillos.',desc:'Ejercicios de predicción de código con retroalimentación inmediata.'},
+    {id:6,t:'Bases de datos relacionales: presentación de clase',tipo:'pres',area:AREAS[2],nivel:NIVELES[0],autor:'Elaboración propia (demo)',fecha:'2026-09-14',lic:'CC BY-SA 4.0',vis:64,url:'recursos/presentacion-bases-datos.html',origen:'Demostración',obj:'Diseñar un modelo entidad-relación sencillo.',desc:'Diapositivas navegables con diagrama entidad-relación y ejercicio propuesto.'},
+    {id:7,t:'Evaluación diagnóstica de anatomía básica',tipo:'eval',area:AREAS[3],nivel:NIVELES[0],autor:'Elaboración propia (demo)',fecha:'2026-09-12',lic:'CC BY-NC-SA 4.0',vis:88,url:'recursos/evaluacion-anatomia.html',origen:'Demostración',obj:'Diagnosticar saberes previos sobre los sistemas del cuerpo humano.',desc:'Diez preguntas autoaplicables con retroalimentación.'},
+    {id:8,t:'Pódcast: historias de la Cartagena colonial',tipo:'podcast',area:AREAS[1],nivel:NIVELES[2],autor:'Elaboración propia (demo)',fecha:'2026-09-16',lic:'CC BY-NC 4.0',vis:53,url:'recursos/podcast-cartagena.html',origen:'Demostración',obj:'Contextualizar procesos históricos de Cartagena de Indias.',desc:'Tres episodios con transcripción, audio por síntesis de voz y guía de escucha.'},
+    {id:9,t:'Infografía: el ciclo contable',tipo:'info',area:AREAS[4],nivel:NIVELES[0],autor:'Elaboración propia (demo)',fecha:'2026-09-08',lic:'CC BY 4.0',vis:142,url:'recursos/infografia-ciclo-contable.html',origen:'Demostración',obj:'Ordenar las etapas del ciclo contable y describir su propósito.',desc:'Las ocho etapas del ciclo contable en una infografía.'},
+    {id:10,t:'Infografía: del aporte a la publicación en el repositorio',tipo:'info',area:AREAS[0],nivel:NIVELES[2],autor:'Elaboración propia (demo)',fecha:'2026-09-26',lic:'CC BY 4.0',vis:77,url:'recursos/infografia-flujo-curaduria.html',origen:'Demostración',obj:'Describir las etapas por las que pasa un recurso antes de publicarse.',desc:'Flujo de curaduría del repositorio y metadatos mínimos de cada recurso.'},
+    {id:11,t:'Planeación: estadística descriptiva (unidad 1)',tipo:'plan',area:AREAS[5],nivel:NIVELES[0],autor:'Elaboración propia (demo)',fecha:'2026-09-06',lic:'CC BY-SA 4.0',vis:71,url:'recursos/planeacion-estadistica.html',origen:'Demostración',obj:'Calcular e interpretar medidas de tendencia central y dispersión.',desc:'Secuencia de 4 sesiones con calculadora de medidas descriptivas.'},
+    {id:12,t:'Diseño instruccional con el modelo ADDIE',tipo:'guia',area:AREAS[0],nivel:NIVELES[1],autor:'Elaboración propia (demo)',fecha:'2026-09-28',lic:'CC BY 4.0',vis:119,url:'recursos/guia-addie.html',origen:'Demostración',obj:'Planificar un curso virtual en las cinco fases del modelo ADDIE.',desc:'Las cinco fases de ADDIE con lista de avance y plantilla imprimible.'},
+    {id:13,t:'Gestión de proyectos: cuestionario de repaso',tipo:'eval',area:AREAS[4],nivel:NIVELES[1],autor:'Elaboración propia (demo)',fecha:'2026-09-20',lic:'CC BY-NC 4.0',vis:80,url:'recursos/evaluacion-gestion-proyectos.html',origen:'Demostración',obj:'Identificar las fases y conceptos básicos de la gestión de proyectos.',desc:'Seis preguntas sobre fases, riesgos y herramientas de un proyecto.'}
   ];
 
   const mine=()=>store.get('rea-mine',[]);
@@ -354,7 +355,8 @@
       '<span class="ico" aria-hidden="true">'+TIPOS[r.tipo][0]+'</span>'+
       '<h3><button data-open="'+r.id+'">'+esc(r.t)+'</button></h3>'+
       '<p>'+esc(r.desc)+'</p>'+
-      '<div class="meta"><span class="tag">'+esc(r.area)+'</span><span class="tag">'+esc(r.nivel)+'</span><span class="tag lic">'+esc(r.lic)+'</span>'+(r.pend?'<span class="tag pend">En curaduría</span>':'')+'</div>'+
+      '<div class="meta"><span class="tag">'+esc(r.area)+'</span><span class="tag">'+esc(r.nivel)+'</span><span class="tag lic">'+esc(r.lic)+'</span>'+(r.pend?'<span class="tag pend">En curaduría</span>':'<span class="tag">'+esc(r.origen||'')+'</span>')+'</div>'+
+      (r.url?'<a class="open" href="'+esc(r.url)+'"'+(r.origen==='Externo'?'':'')+'>Abrir recurso →</a>':'')+
     '</article>').join('');
     $$('.fav').forEach(b=>b.addEventListener('click',()=>{const id=+b.dataset.id;favs.has(id)?favs.delete(id):favs.add(id);store.set('rea-rfavs',[...favs]);render();}));
     $$('[data-open]').forEach(b=>b.addEventListener('click',()=>openRes(+b.dataset.open)));
@@ -371,9 +373,9 @@
     if(!r.pend){r.vis++; }
     $('#dlgBody').innerHTML='<h3 id="dTitle">'+TIPOS[r.tipo][0]+' '+esc(r.t)+'</h3><span class="tag">'+esc(TIPOS[r.tipo][1])+'</span> '+(r.pend?'<span class="tag pend">En curaduría</span>':'<span class="tag lic">Validado por el docente gestor</span>')+
       '<p style="color:var(--muted);font-size:.9rem">'+esc(r.desc)+'</p>'+
-      '<table><tr><th>Autor(es)</th><td>'+esc(r.autor)+'</td></tr><tr><th>Área del saber</th><td>'+esc(r.area)+'</td></tr><tr><th>Nivel</th><td>'+esc(r.nivel)+'</td></tr><tr><th>Fecha</th><td>'+esc(r.fecha)+'</td></tr><tr><th>Licencia</th><td>'+esc(r.lic)+'</td></tr><tr><th>Objetivo de aprendizaje</th><td>'+esc(r.obj)+'</td></tr><tr><th>Consultas</th><td>'+r.vis+'</td></tr></table>'+
+      '<table><tr><th>Autor(es)</th><td>'+esc(r.autor)+'</td></tr><tr><th>Área del saber</th><td>'+esc(r.area)+'</td></tr><tr><th>Nivel</th><td>'+esc(r.nivel)+'</td></tr><tr><th>Fecha</th><td>'+esc(r.fecha)+'</td></tr><tr><th>Licencia</th><td>'+esc(r.lic)+'</td></tr><tr><th>Objetivo de aprendizaje</th><td>'+esc(r.obj)+'</td></tr><tr><th>Origen</th><td>'+esc(r.origen||"Aporte del usuario")+'</td></tr><tr><th>Consultas</th><td>'+r.vis+'</td></tr></table>'+
       '<div class="cite" id="cite">'+citaAPA(r)+'</div>'+
-      '<div class="row" style="margin-top:.9rem"><button class="primary" id="copyCite">Copiar cita APA</button><button class="ghost" id="closeDlg">Cerrar</button></div>';
+      '<div class="row" style="margin-top:.9rem">'+(r.url?'<a class="primary" style="text-decoration:none;display:inline-block" href="'+esc(r.url)+'">Abrir recurso →</a>':'')+'<button class="primary" id="copyCite">Copiar cita APA</button><button class="ghost" id="closeDlg">Cerrar</button></div>';
     $('#copyCite').addEventListener('click',()=>{const txt=$('#cite').textContent;(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Cita copiada'),()=>toast('No se pudo copiar'));});
     $('#closeDlg').addEventListener('click',()=>dlg.close());
     if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
@@ -421,5 +423,6 @@
   render();
 })();
 </script>
+<script>(function(){var b=document.querySelector('.site');if(!b)return;function f(){document.documentElement.style.setProperty('--sitebar',b.offsetHeight+'px');}f();addEventListener('resize',f);})();</script>
 </body>
 </html>
