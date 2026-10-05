@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unidad 3 · Repositorio Institucional REDA</title>
+<meta name="description" content="Boceto interactivo del Repositorio Institucional de Recursos Educativos Digitales Abiertos (REDA) de la Universidad de Cartagena. Unidad 3, Actividad 3.">
+<style>
+  :root{
+    --navy:#152A54;--navy-2:#1E3A73;--gold:#F2A93B;--cyan:#33C6D9;
+    --bg:#F5F7FB;--card:#fff;--soft:#f0f3f9;--soft-2:#fafbfe;
+    --text:#1C2333;--muted:#5B6478;--ok:#1E8E5A;--ok-bg:#e5f6ec;--warn:#B45309;--warn-bg:#fdf1e3;--bad:#B42318;--bad-bg:#fdeceb;
+    --border:#E1E6F0;--link:#1E3A73;--shadow:0 6px 18px rgba(21,42,84,.07);
+  }
+  :root[data-theme="dark"]{
+    --navy:#9db8f0;--navy-2:#b9ccf5;--bg:#0e1424;--card:#161e33;--soft:#1e2842;--soft-2:#1a2339;
+    --text:#e6ebf7;--muted:#9aa6c2;--ok:#5fd29b;--ok-bg:#12352a;--warn:#f0b36a;--warn-bg:#3a2a12;--bad:#ff8f84;--bad-bg:#3b1a18;
+    --border:#2a3656;--link:#9db8f0;--shadow:0 6px 18px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;}
+  a{color:var(--link);}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:5px;}
+  .skip{position:absolute;left:-999px;top:0;background:var(--gold);color:#000;padding:.5rem 1rem;z-index:99;}
+  .skip:focus{left:0;}
+  .site{background:#0f1f42;color:#fff;font-size:.82rem;}
+  .site .in{max-width:1040px;margin:auto;padding:.45rem 1rem;display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;}
+  .site b{margin-right:auto;font-weight:600;color:#c9d4ec;}
+  .site a{color:#fff;text-decoration:none;padding:.25rem .7rem;border-radius:999px;font-weight:600;}
+  .site a:hover{background:rgba(255,255,255,.18);}
+  .site a[aria-current="page"]{background:var(--gold);color:#3a2a06;}
+
+  header.hero{background:linear-gradient(135deg,#152A54,#1E3A73);color:#fff;padding:2.2rem 1.5rem 3.4rem;text-align:center;position:relative;}
+  header.hero h1{margin:0 0 .4rem;font-size:1.7rem;}
+  header.hero p{margin:0 auto;color:#c9d4ec;max-width:720px;font-size:.95rem;}
+  .theme-btn{position:absolute;top:.7rem;right:.8rem;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.3rem .8rem;cursor:pointer;font-size:.82rem;}
+  .demo{display:inline-block;margin-top:.9rem;background:var(--gold);color:#3a2a06;font-weight:700;font-size:.8rem;padding:.25rem .8rem;border-radius:999px;}
+
+  nav.toc{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
+  nav.toc .in{max-width:1040px;margin:auto;padding:.45rem 1rem;display:flex;gap:.3rem;overflow-x:auto;}
+  nav.toc a{white-space:nowrap;text-decoration:none;font-size:.85rem;font-weight:600;color:var(--navy);padding:.35rem .75rem;border-radius:999px;}
+  nav.toc a:hover,nav.toc a.cur{background:var(--navy);color:var(--card);}
+
+  main{max-width:1040px;margin:1.2rem auto 3rem;padding:0 1rem;}
+  section.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem;margin-bottom:1.6rem;box-shadow:var(--shadow);scroll-margin-top:60px;}
+  section.card h2{margin-top:0;font-size:1.2rem;color:var(--navy);}
+  .lead{color:var(--muted);margin-top:0;}
+  .banner{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:.7rem 1rem;font-size:.88rem;margin-bottom:1rem;}
+
+  .stats{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:1rem 0;}
+  .stat{background:var(--soft-2);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;}
+  .stat b{display:block;font-size:1.5rem;color:var(--navy);}
+  .stat span{font-size:.8rem;color:var(--muted);}
+  .bars{display:grid;gap:.4rem;margin-top:.5rem;}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 26px;gap:.6rem;align-items:center;font-size:.84rem;color:var(--muted);}
+  .bar-row .b{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;}
+  .bar-row .b i{display:block;height:100%;background:linear-gradient(90deg,var(--navy-2),var(--cyan));border-radius:99px;transition:width .4s;}
+
+  /* Buscador */
+  .filters{display:grid;gap:.6rem;grid-template-columns:2fr repeat(3,1fr);margin:.5rem 0;}
+  .filters input,.filters select,.form-grid input,.form-grid select,.form-grid textarea{font:inherit;font-size:.9rem;padding:.55rem .75rem;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);width:100%;}
+  .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.6rem 0;}
+  .row .count{margin-left:auto;font-size:.88rem;color:var(--muted);}
+  button.ghost,button.primary{font:inherit;font-weight:600;font-size:.88rem;border-radius:8px;padding:.5rem 1rem;cursor:pointer;}
+  button.ghost{background:var(--soft);color:var(--navy);border:1px solid var(--border);}
+  button.ghost:hover{border-color:var(--navy);}
+  button.ghost[aria-pressed="true"]{background:var(--gold);color:#3a2a06;border-color:var(--gold);}
+  button.primary{background:var(--navy);color:var(--card);border:1px solid var(--navy);}
+  button.primary:hover{background:var(--navy-2);}
+  .chips{display:flex;gap:.4rem;flex-wrap:wrap;}
+  .chip{background:var(--soft);border:1px solid var(--border);color:var(--navy);border-radius:999px;padding:.15rem .7rem;font-size:.78rem;font-weight:600;cursor:pointer;}
+  .chip:hover{border-color:var(--navy);}
+
+  .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin-top:1rem;}
+  .res{border:1px solid var(--border);border-radius:12px;background:var(--soft-2);padding:1rem;display:flex;flex-direction:column;gap:.35rem;position:relative;transition:transform .15s,box-shadow .15s;}
+  .res:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+  .res .ico{font-size:1.6rem;}
+  .res h3{margin:0;font-size:1rem;color:var(--navy);}
+  .res h3 button{all:unset;cursor:pointer;}
+  .res h3 button:hover{text-decoration:underline;}
+  .res h3 button:focus-visible{outline:3px solid var(--gold);}
+  .res p{margin:0;font-size:.86rem;color:var(--muted);}
+  .meta{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:auto;padding-top:.5rem;}
+  .tag{font-size:.72rem;font-weight:700;padding:.12rem .5rem;border-radius:6px;background:var(--soft);color:var(--navy);}
+  .tag.lic{background:var(--ok-bg);color:var(--ok);}
+  .tag.pend{background:var(--warn-bg);color:var(--warn);}
+  .res .fav{position:absolute;top:.6rem;right:.6rem;background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--muted);}
+  .res .fav[aria-pressed="true"]{color:var(--gold);}
+  .empty{text-align:center;color:var(--muted);padding:1.5rem;display:none;}
+
+  /* Modal */
+  dialog{border:1px solid var(--border);border-radius:14px;background:var(--card);color:var(--text);padding:0;max-width:560px;width:calc(100% - 2rem);box-shadow:0 20px 50px rgba(0,0,0,.35);}
+  dialog::backdrop{background:rgba(10,15,30,.55);}
+  .dlg{padding:1.4rem 1.5rem;}
+  .dlg h3{margin:0 0 .2rem;color:var(--navy);font-size:1.15rem;}
+  .dlg table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.8rem 0;}
+  .dlg th,.dlg td{text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--border);vertical-align:top;}
+  .dlg th{width:34%;color:var(--navy);}
+  .dlg .cite{background:var(--soft);border-radius:8px;padding:.6rem .8rem;font-size:.82rem;color:var(--muted);}
+
+  /* Aportar */
+  .form-grid{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+  .form-grid label{font-size:.84rem;font-weight:600;color:var(--navy);display:block;margin-bottom:.2rem;}
+  .form-grid .full{grid-column:1/-1;}
+  .form-grid textarea{min-height:80px;resize:vertical;}
+  .flow{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0;}
+  .step{flex:1;min-width:130px;background:var(--soft-2);border:1px solid var(--border);border-radius:10px;padding:.6rem .8rem;font-size:.82rem;color:var(--muted);}
+  .step b{display:block;color:var(--navy);}
+  .msg{margin-top:.7rem;padding:.6rem .9rem;border-radius:8px;font-size:.88rem;display:none;}
+  .msg.ok{display:block;background:var(--ok-bg);color:var(--ok);}
+  .msg.bad{display:block;background:var(--bad-bg);color:var(--bad);}
+
+  /* 5W+H */
+  .w-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));}
+  .w{border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;background:var(--soft-2);}
+  .w h3{margin:0 0 .3rem;color:var(--navy);font-size:1rem;display:flex;align-items:center;gap:.5rem;}
+  .w h3 span{background:var(--gold);color:#3a2a06;border-radius:8px;padding:.05rem .5rem;font-size:.8rem;}
+  .w p,.w li{font-size:.88rem;color:var(--muted);margin:.25rem 0;}
+  .w ul{padding-left:1.1rem;margin:.2rem 0;}
+  .timeline{list-style:none;padding:0;margin:1rem 0 0;border-left:3px solid var(--cyan);}
+  .timeline li{position:relative;padding:.4rem 0 .8rem 1.2rem;}
+  .timeline li::before{content:"";position:absolute;left:-.55rem;top:.65rem;width:.8rem;height:.8rem;border-radius:50%;background:var(--gold);border:2px solid var(--card);}
+  .timeline b{color:var(--navy);}
+  .timeline small{color:var(--muted);display:block;}
+  .timeline button{all:unset;cursor:pointer;color:var(--navy);font-weight:700;}
+  .timeline li.on button{text-decoration:underline;}
+  .timeline .det{display:none;font-size:.88rem;color:var(--muted);margin-top:.2rem;}
+  .timeline li.on .det{display:block;}
+
+  .video{aspect-ratio:16/9;background:var(--soft);border:2px dashed var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;color:var(--muted);}
+  .video iframe{width:100%;height:100%;border:0;border-radius:10px;}
+  .script{margin-top:1rem;}
+  .script details{border:1px solid var(--border);border-radius:8px;padding:.5rem .8rem;margin:.4rem 0;background:var(--soft-2);font-size:.88rem;}
+  .script summary{cursor:pointer;font-weight:600;color:var(--navy);}
+
+  .toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:var(--card);padding:.6rem 1.1rem;border-radius:10px;font-size:.88rem;transition:transform .3s;z-index:90;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  footer{text-align:center;color:var(--muted);font-size:.8rem;padding:1rem 1rem 2.5rem;}
+  @media (max-width:760px){.filters{grid-template-columns:1fr 1fr;}.filters input{grid-column:1/-1;}.bar-row{grid-template-columns:110px 1fr 24px;}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;}}
+  @media print{.site,nav.toc,.theme-btn,button,.filters{display:none!important;}body{background:#fff;}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<div class="site"><div class="in">
+  <b>Gestión de Recursos Educativos Digitales · U. de Cartagena</b>
+  <a href="index.html">Inicio</a>
+  <a href="explorador.html">Unidad 2 · Explorador</a>
+  <a href="repositorio.html" aria-current="page">Unidad 3 · Repositorio REDA</a>
+</div></div>
+
+<header class="hero">
+  <button class="theme-btn" id="themeBtn" aria-label="Cambiar entre modo claro y oscuro">🌙 Modo oscuro</button>
+  <h1>Repositorio Institucional de Recursos Educativos Digitales Abiertos (REDA)</h1>
+  <p>Propuesta para la Universidad de Cartagena · Unidad 3, Actividad 3: Proyecto de Repositorio REDA. Boceto interactivo de cómo se vería y funcionaría el repositorio.</p>
+  <span class="demo">Boceto con recursos de ejemplo</span>
+</header>
+
+<nav class="toc" aria-label="Secciones">
+  <div class="in">
+    <a href="#sec-explorar">Explorar recursos</a>
+    <a href="#sec-aportar">Aportar un recurso</a>
+    <a href="#sec-5w">Propuesta 5W+H</a>
+    <a href="#sec-video">Video pitch</a>
+  </div>
+</nav>
+
+<main id="main">
+
+  <section class="card" id="sec-explorar" aria-labelledby="h-exp">
+    <h2 id="h-exp">Explorar el repositorio</h2>
+    <p class="lead">Los recursos se organizan por <b>área del saber</b>, <b>nivel educativo</b> y <b>tipo de recurso</b>, y cada uno lleva metadatos básicos (autor, área, nivel, fecha y licencia), como plantea la propuesta.</p>
+    <div class="banner"><b>Aviso:</b> los recursos, autores y fechas de este boceto son <b>ficticios</b> y solo ilustran el funcionamiento. No son materiales reales de la universidad.</div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="filters" role="search">
+      <input type="search" id="q" placeholder="Buscar por título, descripción o autor…" aria-label="Buscar recursos">
+      <select id="fArea" aria-label="Área del saber"></select>
+      <select id="fNivel" aria-label="Nivel educativo"></select>
+      <select id="fTipo" aria-label="Tipo de recurso"></select>
+    </div>
+    <div class="row">
+      <select id="fOrden" aria-label="Ordenar por" style="font:inherit;padding:.45rem .7rem;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)">
+        <option value="rec">Más recientes</option><option value="az">Título A–Z</option><option value="vis">Más consultados</option>
+      </select>
+      <button class="ghost" id="favOnly" aria-pressed="false">⭐ Solo favoritos</button>
+      <button class="ghost" id="clear">Limpiar filtros</button>
+      <span class="count" id="count" role="status" aria-live="polite"></span>
+    </div>
+    <div class="chips" id="chips" aria-label="Filtros rápidos por tipo"></div>
+
+    <div class="grid" id="grid"></div>
+    <p class="empty" id="empty">No hay recursos que coincidan. Prueba quitando algún filtro.</p>
+  </section>
+
+  <section class="card" id="sec-aportar" aria-labelledby="h-ap">
+    <h2 id="h-ap">Aportar un recurso</h2>
+    <p class="lead">Todo recurso nuevo pasa por una curaduría antes de publicarse. Prueba el formulario: tu aporte quedará <b>En curaduría</b> solo en este navegador.</p>
+    <div class="flow" aria-label="Flujo de curaduría">
+      <div class="step"><b>1. Aporte</b>El docente completa metadatos y licencia.</div>
+      <div class="step"><b>2. Revisión</b>El docente gestor de su área valida calidad y pertinencia.</div>
+      <div class="step"><b>3. Licencia</b>Se verifica el derecho de autor (Ley 23/1982, Ley 1915/2018).</div>
+      <div class="step"><b>4. Publicación</b>Se publica con licencia abierta y reconocimiento del autor.</div>
+    </div>
+    <form id="form" class="form-grid" novalidate>
+      <div class="full"><label for="fTitulo">Título del recurso *</label><input id="fTitulo" maxlength="90" required></div>
+      <div><label for="fAutor">Autor(es) *</label><input id="fAutor" maxlength="70" required></div>
+      <div><label for="aArea">Área del saber *</label><select id="aArea" required></select></div>
+      <div><label for="aNivel">Nivel educativo *</label><select id="aNivel" required></select></div>
+      <div><label for="aTipo">Tipo de recurso *</label><select id="aTipo" required></select></div>
+      <div><label for="aLic">Licencia de uso abierto *</label>
+        <select id="aLic" required><option value="">— Elige —</option><option>CC BY 4.0</option><option>CC BY-SA 4.0</option><option>CC BY-NC 4.0</option><option>CC BY-NC-SA 4.0</option><option>Sin licencia / no sé</option></select></div>
+      <div class="full"><label for="aObj">Objetivo de aprendizaje *</label><textarea id="aObj" maxlength="300" required></textarea></div>
+      <div class="full"><button type="submit" class="primary">Enviar a curaduría</button> <button type="button" class="ghost" id="resetMine">Borrar mis aportes</button></div>
+    </form>
+    <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
+  </section>
+
+  <section class="card" id="sec-5w" aria-labelledby="h-5w">
+    <h2 id="h-5w">Propuesta 5W+H</h2>
+    <p class="lead">La propuesta responde las seis preguntas del modelo, articulando lo pedagógico, lo tecnológico y la gestión.</p>
+    <div class="w-grid">
+      <div class="w"><h3><span>Qué</span> ¿Qué es y qué incluirá?</h3>
+        <p>Plataforma digital de acceso abierto para almacenar, catalogar y difundir los recursos que producen los docentes. No es un simple banco de archivos: se organiza por área, nivel y tipo.</p>
+        <ul><li>OVA, guías y talleres interactivos</li><li>Videos y tutoriales, presentaciones</li><li>Cuestionarios, pódcast, infografías</li><li>Planeaciones de clase</li></ul></div>
+      <div class="w"><h3><span>Por qué</span> Necesidad que atiende</h3>
+        <ul><li>Los recursos hoy están dispersos en equipos personales, correos y chats.</li><li>Se duplica el esfuerzo y se pierde material cuando un docente se retira.</li><li>Responde a la Estrategia Nacional REDA (MEN, 2012).</li><li>Reconoce al docente como productor de conocimiento.</li></ul></div>
+      <div class="w"><h3><span>Cuándo</span> Fases de implementación</h3>
+        <p>Cinco fases en un año lectivo. Pulsa una fase para ver el detalle:</p>
+        <ol class="timeline" id="timeline" style="list-style:none"></ol></div>
+      <div class="w"><h3><span>Quién</span> Responsables y usuarios</h3>
+        <ul><li><b>Responsables:</b> comité gestor (coordinación académica o TIC) y un docente gestor por área.</li><li><b>Usuarios directos:</b> docentes y estudiantes.</li><li><b>Beneficiarios indirectos:</b> familias y la comunidad educativa.</li></ul></div>
+      <div class="w"><h3><span>Cómo</span> Estrategia</h3>
+        <ul><li><b>Pedagógica:</b> cada recurso declara objetivo, grado y competencia (modelo ADDIE).</li><li><b>Tecnológica:</b> plataforma gratuita o de bajo costo (Google Sites, Moodle) con metadatos por área, nivel y tipo.</li><li><b>Gestión:</b> licencias abiertas (Creative Commons), derechos de autor, tiempo institucional para curaduría y formación continua.</li></ul></div>
+      <div class="w"><h3><span>Dónde</span> Escenarios de impacto</h3>
+        <ul><li>El aula, como apoyo a las prácticas pedagógicas.</li><li>El estudio autónomo, dentro y fuera de la jornada.</li><li>El trabajo colaborativo entre docentes de áreas y sedes.</li><li>A futuro, articulación con el Repositorio Nacional de REDA.</li></ul></div>
+    </div>
+  </section>
+
+  <section class="card" id="sec-video" aria-labelledby="h-vid">
+    <h2 id="h-vid">Video pitch (máximo 3 minutos)</h2>
+    <p class="lead">Síntesis persuasiva de la propuesta, tipo elevator pitch.</p>
+    <div class="video" id="videoBox"><span>🎬 El video se incorporará aquí cuando esté publicado.<br><small>(Editar la constante <code>VIDEO_URL</code> al final del archivo.)</small></span></div>
+    <div class="script"><b>Guion por tiempos</b>
+      <details><summary>0:00–0:15 · Apertura</summary>¿Sabían que en nuestra institución cada docente guarda sus mejores recursos digitales en su propio computador, donde nadie más puede aprovecharlos?</details>
+      <details><summary>0:15–0:45 · Qué</summary>El Repositorio Institucional REDA: un espacio digital abierto donde reunimos, clasificamos y compartimos guías, videos, OVA y evaluaciones creadas por nuestros docentes.</details>
+      <details><summary>0:45–1:10 · Por qué</summary>Hoy ese conocimiento se pierde o se repite. El repositorio, alineado con la Estrategia Nacional REDA, evita ese desperdicio.</details>
+      <details><summary>1:10–1:30 · Cuándo</summary>Cinco fases en un año: diagnóstico, diseño, capacitación, lanzamiento piloto y evaluación continua.</details>
+      <details><summary>1:30–1:55 · Quién</summary>Un comité gestor de docentes lidera; docentes, estudiantes y familias son usuarios y beneficiarios.</details>
+      <details><summary>1:55–2:25 · Cómo</summary>Plataforma gratuita, metadatos claros y licencias abiertas que respetan la Ley 23 de 1982 y la Ley 1915 de 2018.</details>
+      <details><summary>2:25–3:00 · Dónde y cierre</summary>Impacto en el aula, en casa y, más adelante, conexión con el Repositorio Nacional de REDA.</details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Unidad 3 · Boceto de propuesta académica con datos de ejemplo · Ing. Jhony Antonio Gutiérrez Solórzano · Docente: Lizeth Patricia Pardo Wandurraga.<br>
+  Se usó Claude (Anthropic) como apoyo en estructuración, redacción y código; el autor revisó y validó el contenido. Ley 23 de 1982 · Ley 1915 de 2018.
+</footer>
+
+<dialog id="dlg" aria-labelledby="dTitle"><div class="dlg" id="dlgBody"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  /* Pega aquí el enlace del video (YouTube, formato https://www.youtube.com/watch?v=XXXX). */
+  const VIDEO_URL = "";
+
+  const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+  const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+  const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.i);toast.i=setTimeout(()=>t.classList.remove('show'),2200);}
+
+  /* Tema */
+  const root=document.documentElement,tb=$('#themeBtn');
+  function setTheme(t){root.dataset.theme=t;tb.textContent=t==='dark'?'☀️ Modo claro':'🌙 Modo oscuro';store.set('rea-theme',t);}
+  setTheme(store.get('rea-theme',matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+  tb.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+
+  /* Taxonomía */
+  const AREAS=['Educación y pedagogía','Ciencias sociales y humanas','Ingeniería y tecnología','Ciencias de la salud','Ciencias económicas y administrativas','Ciencias básicas'];
+  const NIVELES=['Pregrado','Posgrado','Educación continua'];
+  const TIPOS={ova:['🧩','OVA'],guia:['📝','Guía o taller interactivo'],video:['🎬','Video o tutorial'],pres:['🖥️','Presentación multimedia'],eval:['✅','Cuestionario o evaluación'],podcast:['🎙️','Pódcast educativo'],info:['🖼️','Infografía o imagen'],plan:['📅','Planeación de clase']};
+
+  /* Recursos de ejemplo (ficticios) */
+  const SEED=[
+    {id:1,t:'Introducción a la evaluación de RED',tipo:'ova',area:AREAS[0],nivel:NIVELES[1],autor:'Docente de ejemplo A',fecha:'2026-03-12',lic:'CC BY 4.0',vis:128,obj:'Aplicar criterios de calidad, pertinencia y usabilidad a un recurso digital.',desc:'Objeto virtual con actividades de clasificación y retroalimentación inmediata.'},
+    {id:2,t:'Taller de derechos de autor y licencias abiertas',tipo:'guia',area:AREAS[0],nivel:NIVELES[2],autor:'Docente de ejemplo B',fecha:'2026-04-02',lic:'CC BY-SA 4.0',vis:96,obj:'Elegir la licencia Creative Commons adecuada para un recurso propio.',desc:'Guía interactiva con casos para decidir entre las licencias CC.'},
+    {id:3,t:'Tutorial: crear un formulario de autoevaluación',tipo:'video',area:AREAS[0],nivel:NIVELES[1],autor:'Docente de ejemplo C',fecha:'2026-04-18',lic:'CC BY 4.0',vis:210,obj:'Construir un cuestionario con retroalimentación automática.',desc:'Video de 8 minutos paso a paso.'},
+    {id:4,t:'Fundamentos de programación con ejemplos',tipo:'ova',area:AREAS[2],nivel:NIVELES[0],autor:'Docente de ejemplo D',fecha:'2026-02-20',lic:'CC BY-NC 4.0',vis:174,obj:'Reconocer variables, condicionales y ciclos.',desc:'Ejercicios guiados con autocorrección.'},
+    {id:5,t:'Bases de datos relacionales: presentación de clase',tipo:'pres',area:AREAS[2],nivel:NIVELES[0],autor:'Docente de ejemplo E',fecha:'2026-05-05',lic:'CC BY-SA 4.0',vis:64,obj:'Diseñar un modelo entidad-relación sencillo.',desc:'Diapositivas con ejemplos y ejercicios propuestos.'},
+    {id:6,t:'Evaluación diagnóstica de anatomía básica',tipo:'eval',area:AREAS[3],nivel:NIVELES[0],autor:'Docente de ejemplo F',fecha:'2026-03-28',lic:'CC BY-NC-SA 4.0',vis:88,obj:'Diagnosticar saberes previos sobre sistemas del cuerpo.',desc:'Banco de 20 preguntas autoaplicables.'},
+    {id:7,t:'Pódcast: historias de la Cartagena colonial',tipo:'podcast',area:AREAS[1],nivel:NIVELES[2],autor:'Docente de ejemplo G',fecha:'2026-05-14',lic:'CC BY-NC 4.0',vis:53,obj:'Contextualizar procesos históricos de la ciudad.',desc:'Tres episodios de 15 minutos con guía de escucha.'},
+    {id:8,t:'Infografía: ciclo contable',tipo:'info',area:AREAS[4],nivel:NIVELES[0],autor:'Docente de ejemplo H',fecha:'2026-01-30',lic:'CC BY 4.0',vis:142,obj:'Ordenar las etapas del ciclo contable.',desc:'Infografía descargable en alta resolución.'},
+    {id:9,t:'Planeación: estadística descriptiva (unidad 1)',tipo:'plan',area:AREAS[5],nivel:NIVELES[0],autor:'Docente de ejemplo I',fecha:'2026-02-09',lic:'CC BY-SA 4.0',vis:71,obj:'Calcular e interpretar medidas de tendencia central.',desc:'Secuencia de 4 sesiones con evaluación formativa.'},
+    {id:10,t:'Diseño instruccional con el modelo ADDIE',tipo:'guia',area:AREAS[0],nivel:NIVELES[1],autor:'Docente de ejemplo J',fecha:'2026-05-22',lic:'CC BY 4.0',vis:119,obj:'Planificar un curso virtual en las cinco fases del modelo.',desc:'Guía con plantilla descargable.'},
+    {id:11,t:'Gestión de proyectos: video introductorio',tipo:'video',area:AREAS[4],nivel:NIVELES[1],autor:'Docente de ejemplo K',fecha:'2026-04-09',lic:'CC BY-NC 4.0',vis:80,obj:'Identificar fases y roles de un proyecto.',desc:'Video de 6 minutos con ejemplos del sector.'},
+    {id:12,t:'Laboratorio virtual: leyes de los gases',tipo:'ova',area:AREAS[5],nivel:NIVELES[0],autor:'Docente de ejemplo L',fecha:'2026-03-03',lic:'CC BY-SA 4.0',vis:156,obj:'Relacionar presión, volumen y temperatura mediante simulación.',desc:'Simulador interactivo con guía de laboratorio.'},
+    {id:13,t:'Ética del cuidado: presentación y lecturas',tipo:'pres',area:AREAS[3],nivel:NIVELES[1],autor:'Docente de ejemplo M',fecha:'2026-05-30',lic:'CC BY-NC-SA 4.0',vis:39,obj:'Debatir dilemas éticos en la práctica profesional.',desc:'Diapositivas y casos para discusión en clase.'},
+    {id:14,t:'Alfabetización digital docente: rutas de formación',tipo:'plan',area:AREAS[0],nivel:NIVELES[2],autor:'Docente de ejemplo N',fecha:'2026-06-11',lic:'CC BY 4.0',vis:102,obj:'Diseñar un plan personal de formación en competencias digitales.',desc:'Planeación modular de 6 semanas.'}
+  ];
+
+  const mine=()=>store.get('rea-mine',[]);
+  const all=()=>SEED.concat(mine());
+  let favs=new Set(store.get('rea-rfavs',[]));
+  let chipTipo='';
+
+  /* Selects */
+  function fill(sel,first,arr){sel.innerHTML='<option value="">'+first+'</option>'+arr.map(a=>'<option>'+esc(a)+'</option>').join('');}
+  fill($('#fArea'),'Todas las áreas',AREAS);
+  fill($('#fNivel'),'Todos los niveles',NIVELES);
+  $('#fTipo').innerHTML='<option value="">Todos los tipos</option>'+Object.entries(TIPOS).map(([k,v])=>'<option value="'+k+'">'+v[1]+'</option>').join('');
+  fill($('#aArea'),'— Elige —',AREAS); fill($('#aNivel'),'— Elige —',NIVELES);
+  $('#aTipo').innerHTML='<option value="">— Elige —</option>'+Object.entries(TIPOS).map(([k,v])=>'<option value="'+k+'">'+v[1]+'</option>').join('');
+
+  /* Estadísticas */
+  function stats(){
+    const d=all(), pub=d.filter(x=>!x.pend);
+    const areas=new Set(pub.map(x=>x.area)).size;
+    $('#stats').innerHTML=
+      '<div class="stat"><b>'+pub.length+'</b><span>Recursos publicados</span></div>'+
+      '<div class="stat"><b>'+areas+'</b><span>Áreas del saber</span></div>'+
+      '<div class="stat"><b>'+Object.keys(TIPOS).length+'</b><span>Tipos de recurso</span></div>'+
+      '<div class="stat"><b>'+(d.length-pub.length)+'</b><span>En curaduría (tus aportes)</span></div>';
+  }
+
+  /* Chips por tipo */
+  function chips(){
+    const d=all(), c={}; d.forEach(x=>c[x.tipo]=(c[x.tipo]||0)+1);
+    $('#chips').innerHTML=Object.entries(TIPOS).map(([k,v])=>'<button class="chip" data-k="'+k+'" aria-pressed="'+(chipTipo===k)+'" style="'+(chipTipo===k?'background:var(--navy);color:var(--card)':'')+'">'+v[0]+' '+v[1]+' ('+(c[k]||0)+')</button>').join('');
+    $$('.chip').forEach(b=>b.addEventListener('click',()=>{chipTipo=chipTipo===b.dataset.k?'':b.dataset.k;$('#fTipo').value=chipTipo;render();}));
+  }
+
+  function citaAPA(r){
+    const y=r.fecha.slice(0,4);
+    return esc(r.autor)+' ('+y+'). '+'<i>'+esc(r.t)+'</i> ['+esc(TIPOS[r.tipo][1])+']. Repositorio Institucional REDA, Universidad de Cartagena. Licencia '+esc(r.lic)+'.';
+  }
+
+  function render(){
+    const q=norm($('#q').value.trim()), a=$('#fArea').value, n=$('#fNivel').value, t=$('#fTipo').value, fo=$('#favOnly').getAttribute('aria-pressed')==='true';
+    chipTipo=t; chips();
+    let d=all().filter(r=>(!q||norm(r.t+' '+r.desc+' '+r.autor+' '+r.obj).includes(q))&&(!a||r.area===a)&&(!n||r.nivel===n)&&(!t||r.tipo===t)&&(!fo||favs.has(r.id)));
+    const o=$('#fOrden').value;
+    d.sort((x,y)=>o==='az'?x.t.localeCompare(y.t,'es'):o==='vis'?y.vis-x.vis:y.fecha.localeCompare(x.fecha));
+    $('#count').textContent=d.length+' recurso'+(d.length===1?'':'s');
+    $('#empty').style.display=d.length?'none':'block';
+    $('#grid').innerHTML=d.map(r=>'<article class="res">'+
+      '<button class="fav" data-id="'+r.id+'" aria-pressed="'+favs.has(r.id)+'" aria-label="Marcar como favorito: '+esc(r.t)+'">★</button>'+
+      '<span class="ico" aria-hidden="true">'+TIPOS[r.tipo][0]+'</span>'+
+      '<h3><button data-open="'+r.id+'">'+esc(r.t)+'</button></h3>'+
+      '<p>'+esc(r.desc)+'</p>'+
+      '<div class="meta"><span class="tag">'+esc(r.area)+'</span><span class="tag">'+esc(r.nivel)+'</span><span class="tag lic">'+esc(r.lic)+'</span>'+(r.pend?'<span class="tag pend">En curaduría</span>':'')+'</div>'+
+    '</article>').join('');
+    $$('.fav').forEach(b=>b.addEventListener('click',()=>{const id=+b.dataset.id;favs.has(id)?favs.delete(id):favs.add(id);store.set('rea-rfavs',[...favs]);render();}));
+    $$('[data-open]').forEach(b=>b.addEventListener('click',()=>openRes(+b.dataset.open)));
+    stats();
+  }
+  ['input','change'].forEach(e=>['#q','#fArea','#fNivel','#fTipo','#fOrden'].forEach(s=>$(s).addEventListener(e,render)));
+  $('#favOnly').addEventListener('click',function(){this.setAttribute('aria-pressed',this.getAttribute('aria-pressed')!=='true');render();});
+  $('#clear').addEventListener('click',()=>{['#q','#fArea','#fNivel','#fTipo'].forEach(s=>$(s).value='');$('#favOnly').setAttribute('aria-pressed','false');render();});
+
+  /* Modal */
+  const dlg=$('#dlg');
+  function openRes(id){
+    const r=all().find(x=>x.id===id); if(!r)return;
+    if(!r.pend){r.vis++; }
+    $('#dlgBody').innerHTML='<h3 id="dTitle">'+TIPOS[r.tipo][0]+' '+esc(r.t)+'</h3><span class="tag">'+esc(TIPOS[r.tipo][1])+'</span> '+(r.pend?'<span class="tag pend">En curaduría</span>':'<span class="tag lic">Validado por el docente gestor</span>')+
+      '<p style="color:var(--muted);font-size:.9rem">'+esc(r.desc)+'</p>'+
+      '<table><tr><th>Autor(es)</th><td>'+esc(r.autor)+'</td></tr><tr><th>Área del saber</th><td>'+esc(r.area)+'</td></tr><tr><th>Nivel</th><td>'+esc(r.nivel)+'</td></tr><tr><th>Fecha</th><td>'+esc(r.fecha)+'</td></tr><tr><th>Licencia</th><td>'+esc(r.lic)+'</td></tr><tr><th>Objetivo de aprendizaje</th><td>'+esc(r.obj)+'</td></tr><tr><th>Consultas</th><td>'+r.vis+'</td></tr></table>'+
+      '<div class="cite" id="cite">'+citaAPA(r)+'</div>'+
+      '<div class="row" style="margin-top:.9rem"><button class="primary" id="copyCite">Copiar cita APA</button><button class="ghost" id="closeDlg">Cerrar</button></div>';
+    $('#copyCite').addEventListener('click',()=>{const txt=$('#cite').textContent;(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Cita copiada'),()=>toast('No se pudo copiar'));});
+    $('#closeDlg').addEventListener('click',()=>dlg.close());
+    if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+  }
+  dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close();});
+
+  /* Aportar */
+  $('#form').addEventListener('submit',e=>{
+    e.preventDefault();
+    const v={t:$('#fTitulo').value.trim(),autor:$('#fAutor').value.trim(),area:$('#aArea').value,nivel:$('#aNivel').value,tipo:$('#aTipo').value,lic:$('#aLic').value,obj:$('#aObj').value.trim()};
+    const m=$('#formMsg');
+    if(Object.values(v).some(x=>!x)){m.className='msg bad';m.textContent='Completa todos los campos obligatorios (*).';return;}
+    if(v.lic.startsWith('Sin licencia')){m.className='msg bad';m.textContent='No se puede enviar: el repositorio solo acepta recursos con licencia de uso abierto (p. ej. Creative Commons).';return;}
+    const list=mine(); list.push(Object.assign(v,{id:1000+Date.now()%1e7,fecha:new Date().toISOString().slice(0,10),vis:0,desc:v.obj,pend:true}));
+    store.set('rea-mine',list); $('#form').reset();
+    m.className='msg ok'; m.textContent='✅ Recurso enviado. Quedó "En curaduría" a la espera de validación del docente gestor del área.';
+    render();
+  });
+  $('#resetMine').addEventListener('click',()=>{store.set('rea-mine',[]);$('#formMsg').className='msg ok';$('#formMsg').textContent='Se borraron tus aportes de este navegador.';render();});
+
+  /* Cronograma */
+  const FASES=[
+    ['Fase 1 · Diagnóstico y planeación','Semanas 1–4','Identificar los recursos digitales existentes entre los docentes, sus necesidades de formación y las condiciones de conectividad e infraestructura.'],
+    ['Fase 2 · Diseño y selección de plataforma','Semanas 5–8','Definir la arquitectura del repositorio, el esquema de metadatos y la plataforma tecnológica.'],
+    ['Fase 3 · Capacitación y carga inicial','Semanas 9–16','Formación docente en derechos de autor, licenciamiento abierto y uso de la plataforma; carga de un primer lote por área.'],
+    ['Fase 4 · Lanzamiento y piloto','Semanas 17–20','Apertura a la comunidad educativa y acompañamiento a los primeros usuarios.'],
+    ['Fase 5 · Evaluación y sostenibilidad','Desde la semana 21, revisión semestral','Aplicar instrumentos de calidad y usabilidad y ajustar la estrategia de forma continua.']
+  ];
+  $('#timeline').innerHTML=FASES.map((f,i)=>'<li'+(i===0?' class="on"':'')+'><button aria-expanded="'+(i===0)+'">'+esc(f[0])+'</button><small>'+esc(f[1])+'</small><div class="det">'+esc(f[2])+'</div></li>').join('');
+  $$('#timeline li').forEach(li=>$('button',li).addEventListener('click',function(){
+    const open=!li.classList.contains('on'); $$('#timeline li').forEach(x=>{x.classList.remove('on');$('button',x).setAttribute('aria-expanded','false');});
+    if(open){li.classList.add('on');this.setAttribute('aria-expanded','true');}
+  }));
+
+  /* Video */
+  (function(){
+    const m=VIDEO_URL.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/);
+    if(m) $('#videoBox').innerHTML='<iframe src="https://www.youtube.com/embed/'+m[1]+'" title="Video pitch del Repositorio REDA" allowfullscreen></iframe>';
+  })();
+
+  /* Navegación activa */
+  const links=$$('nav.toc a'),secs=links.map(a=>$(a.getAttribute('href')));
+  addEventListener('scroll',()=>{let c=-1;secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<120)c=i;});links.forEach((a,i)=>a.classList.toggle('cur',i===c));},{passive:true});
+
+  render();
+})();
+</script>
+</body>
+</html>
